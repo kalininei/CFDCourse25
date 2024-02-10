@@ -1,0 +1,80 @@
+\babel@toc {russian}{}
+\contentsline {section}{\numberline {1}Лекция 1 (02.09)}{3}{section.1}%
+\contentsline {section}{\numberline {A}Формулы и обозначения}{4}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Векторы}{5}{subsection.A.1}%
+\contentsline {subsubsection}{\numberline {A.1.1}Обозначение}{5}{subsubsection.A.1.1}%
+\contentsline {subsubsection}{\numberline {A.1.2}Набла--нотация}{5}{subsubsection.A.1.2}%
+\contentsline {subsection}{\numberline {A.2}Интегрирование}{7}{subsection.A.2}%
+\contentsline {subsubsection}{\numberline {A.2.1}Формула Гаусса--Остроградского}{7}{subsubsection.A.2.1}%
+\contentsline {subsubsection}{\numberline {A.2.2}Интегрирование по частям}{7}{subsubsection.A.2.2}%
+\contentsline {subsubsection}{\numberline {A.2.3}Численное интегрирование в заданной области}{8}{subsubsection.A.2.3}%
+\contentsline {subsection}{\numberline {A.3}Интерполяционные полиномы}{9}{subsection.A.3}%
+\contentsline {subsubsection}{\numberline {A.3.1}Многочлен Лагранжа}{9}{subsubsection.A.3.1}%
+\contentsline {subsubsubsection}{\numberline {A.3.1.1}Узловые базисные функции}{9}{subsubsubsection.A.3.1.1}%
+\contentsline {subsubsubsection}{\numberline {A.3.1.2}Интерполяция в параметрическом отрезке}{10}{subsubsubsection.A.3.1.2}%
+\contentsline {paragraph}{Линейный базис}{10}{section*.1}%
+\contentsline {paragraph}{Квадратичный базис}{11}{section*.2}%
+\contentsline {paragraph}{Кубический базис}{12}{section*.3}%
+\contentsline {subsubsubsection}{\numberline {A.3.1.3}Интерполяция в параметрическом треугольнике}{13}{subsubsubsection.A.3.1.3}%
+\contentsline {paragraph}{Линейный базис}{13}{section*.4}%
+\contentsline {paragraph}{Квадратичный базис}{15}{section*.5}%
+\contentsline {paragraph}{Кубический базис}{15}{section*.6}%
+\contentsline {paragraph}{Неполный кубический базис}{15}{section*.7}%
+\contentsline {subsubsubsection}{\numberline {A.3.1.4}Интерполяция в параметрическом квадрате}{15}{subsubsubsection.A.3.1.4}%
+\contentsline {paragraph}{Билинейный базис}{15}{section*.8}%
+\contentsline {paragraph}{Определение двумерных базисов через комбинацию одномерных}{16}{section*.9}%
+\contentsline {paragraph}{Биквадратичный базис}{17}{section*.10}%
+\contentsline {paragraph}{Бикубический базис}{17}{section*.11}%
+\contentsline {paragraph}{Неполный биквадратичный базис}{17}{section*.12}%
+\contentsline {paragraph}{Неполный бикубический базис}{17}{section*.13}%
+\contentsline {subsection}{\numberline {A.4}Геометрические алгоритмы}{18}{subsection.A.4}%
+\contentsline {subsubsection}{\numberline {A.4.1}Преобразование координат}{18}{subsubsection.A.4.1}%
+\contentsline {subsubsubsection}{\numberline {A.4.1.1}Матрица Якоби}{18}{subsubsubsection.A.4.1.1}%
+\contentsline {paragraph}{Якобиан}{18}{figure.11}%
+\contentsline {subsubsubsection}{\numberline {A.4.1.2}Дифференцирование в параметрической плоскости}{19}{subsubsubsection.A.4.1.2}%
+\contentsline {subsubsubsection}{\numberline {A.4.1.3}Интегрирование в параметрической плоскости}{20}{subsubsubsection.A.4.1.3}%
+\contentsline {subsubsubsection}{\numberline {A.4.1.4}Двумерное линейное преобразование. Параметрический треугольник}{20}{subsubsubsection.A.4.1.4}%
+\contentsline {subsubsubsection}{\numberline {A.4.1.5}Двумерное билинейное преобразование. Параметрический квадрат}{21}{subsubsubsection.A.4.1.5}%
+\contentsline {subsubsubsection}{\numberline {A.4.1.6}Трёхмерное линейное преобразование. Параметрический тетраэдр}{21}{subsubsubsection.A.4.1.6}%
+\contentsline {subsubsection}{\numberline {A.4.2}Свойства многоугольника}{21}{subsubsection.A.4.2}%
+\contentsline {subsubsubsection}{\numberline {A.4.2.1}Площадь многоугольника}{21}{subsubsubsection.A.4.2.1}%
+\contentsline {paragraph}{Плоский полигон в пространтве}{22}{section*.15}%
+\contentsline {subsubsubsection}{\numberline {A.4.2.2}Интеграл по многоугольнику}{23}{subsubsubsection.A.4.2.2}%
+\contentsline {subsubsubsection}{\numberline {A.4.2.3}Центр масс многоугольника}{23}{subsubsubsection.A.4.2.3}%
+\contentsline {subsubsection}{\numberline {A.4.3}Свойства многогранника}{24}{subsubsection.A.4.3}%
+\contentsline {subsubsubsection}{\numberline {A.4.3.1}Объём многогранника}{24}{subsubsubsection.A.4.3.1}%
+\contentsline {subsubsubsection}{\numberline {A.4.3.2}Интеграл по многограннику}{24}{subsubsubsection.A.4.3.2}%
+\contentsline {subsubsubsection}{\numberline {A.4.3.3}Центр масс многогранника}{24}{subsubsubsection.A.4.3.3}%
+\contentsline {subsubsection}{\numberline {A.4.4}Поиск многоугольника, содержащего заданную точку}{24}{subsubsection.A.4.4}%
+\contentsline {section}{\numberline {B}Работа с инфраструктурой проекта CFDCourse}{25}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Сборка и запуск}{26}{subsection.B.1}%
+\contentsline {subsubsection}{\numberline {B.1.1}Сборка проекта CFDCourse}{26}{subsubsection.B.1.1}%
+\contentsline {subsubsubsection}{\numberline {B.1.1.1}Подготовка}{26}{subsubsubsection.B.1.1.1}%
+\contentsline {subsubsubsection}{\numberline {B.1.1.2}VisualStudio}{26}{subsubsubsection.B.1.1.2}%
+\contentsline {subsubsubsection}{\numberline {B.1.1.3}VSCode}{28}{subsubsubsection.B.1.1.3}%
+\contentsline {subsubsection}{\numberline {B.1.2}Запуск конкретного теста}{29}{subsubsection.B.1.2}%
+\contentsline {subsubsection}{\numberline {B.1.3}Сборка релизной версии}{31}{subsubsection.B.1.3}%
+\contentsline {subsection}{\numberline {B.2}Git}{33}{subsection.B.2}%
+\contentsline {subsubsection}{\numberline {B.2.1}Основные команды}{33}{subsubsection.B.2.1}%
+\contentsline {subsubsection}{\numberline {B.2.2}Порядок работы с репозиторием CFDCourse}{34}{subsubsection.B.2.2}%
+\contentsline {subsection}{\numberline {B.3}Paraview}{36}{subsection.B.3}%
+\contentsline {subsubsection}{\numberline {B.3.1}Данные на одномерных сетках}{36}{subsubsection.B.3.1}%
+\contentsline {paragraph}{Развернуть изображение в плоскость xy}{36}{section*.16}%
+\contentsline {paragraph}{Отобразить данные в виде y-координаты}{36}{section*.17}%
+\contentsline {paragraph}{Цвет и толщина линии}{37}{section*.18}%
+\contentsline {paragraph}{Настрока масштабов и отображение осей координат}{37}{section*.19}%
+\contentsline {paragraph}{Построение графиков для нескольких данных}{38}{section*.20}%
+\contentsline {paragraph}{Обновление данных при изменении исходного файла}{38}{section*.21}%
+\contentsline {subsubsection}{\numberline {B.3.2}Изолинии для двумерного поля}{39}{subsubsection.B.3.2}%
+\contentsline {paragraph}{Задание цвета и толщины изолинии}{40}{section*.22}%
+\contentsline {subsubsection}{\numberline {B.3.3}Данные на двумерных сетках в виде поверхности}{40}{subsubsection.B.3.3}%
+\contentsline {subsubsection}{\numberline {B.3.4}Числовых значения в точках и ячейках}{41}{subsubsection.B.3.4}%
+\contentsline {subsubsection}{\numberline {B.3.5}Векторные поля}{41}{subsubsection.B.3.5}%
+\contentsline {paragraph}{Настройка отображения стрелок}{42}{section*.23}%
+\contentsline {paragraph}{Уменьшения разброса по длине стрелок}{42}{section*.24}%
+\contentsline {subsubsection}{\numberline {B.3.6}Значение функции вдоль линии}{43}{subsubsection.B.3.6}%
+\contentsline {paragraph}{Настройка графика}{44}{section*.25}%
+\contentsline {paragraph}{Отрисовка в отдельном окне}{44}{section*.26}%
+\contentsline {subsection}{\numberline {B.4}Hybmesh}{46}{subsection.B.4}%
+\contentsline {subsubsection}{\numberline {B.4.1}Работа в Windows}{46}{subsubsection.B.4.1}%
+\contentsline {subsubsection}{\numberline {B.4.2}Работа в Linux}{46}{subsubsection.B.4.2}%

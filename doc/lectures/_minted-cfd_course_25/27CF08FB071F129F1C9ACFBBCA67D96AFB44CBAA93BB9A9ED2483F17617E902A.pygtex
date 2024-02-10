@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{sys}
+\PYG{n}{sys}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/path/to/HybMesh/src/py/\PYGZdq{}}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} вставить полный путь к Hybmesh/src/py}
+\PYG{n}{execfile}\PYG{p}{(}\PYG{n}{sys}\PYG{o}{.}\PYG{n}{argv}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+\end{Verbatim}
