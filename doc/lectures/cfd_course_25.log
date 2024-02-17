@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/TeX Live for SUSE Linux) (preloaded format=pdflatex 2023.10.17)  10 FEB 2024 07:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/TeX Live for SUSE Linux) (preloaded format=pdflatex 2023.10.17)  17 FEB 2024 07:39
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1041,12 +1041,12 @@ Package PythonTeX Warning: A "listing" environment already exists
 ng environment on input line 47.
 
 (./pythontex-files-cfd_course_25/cfd_course_25.pytxpyg) (./cfd_course_25.toc
-LaTeX Font Info:    Trying to load font information for U+msa on input line 4.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 3.
 
 (/usr/share/texmf/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 4.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 3.
 
 (/usr/share/texmf/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1068,7 +1068,13 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  [2]
 \openout2 = `lect01.aux'.
 
- (./lect01.tex) [3
+ (./lect01.tex
+LaTeX Font Info:    Trying to load font information for T2A+cmtt on input line 
+6.
+
+(/usr/share/texmf/tex/latex/cyrillic/t2acmtt.fd
+File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+)) [3
 
 ] [4
 
@@ -1076,14 +1082,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ]
 \openout2 = `eq-vectors.aux'.
 
- (./eq-vectors.tex [5
+ (./eq-vectors.tex
+[5
 
-])
-[6]
+]) [6]
 \openout2 = `eq-partint.aux'.
 
  (./eq-partint.tex
-<../img//div1d.pdf, id=321, 399.24689pt x 193.25285pt>
+<../img//div1d.pdf, id=332, 399.24689pt x 193.25285pt>
 File: ../img//div1d.pdf Graphic file (type pdf)
 <use ../img//div1d.pdf>
 Package pdftex.def Info: ../img//div1d.pdf  used on input line 19.
@@ -1095,47 +1101,46 @@ Package pdftex.def Info: ../img//div1d.pdf  used on input line 19.
  <../img//div1d.pdf>]) [8]
 \openout2 = `eq-basis.aux'.
 
- (./eq-basis.tex [9
+ (./eq-basis.tex
+[9
 
 
 
 ] [10]
-<../img//basis1d_linear.pdf, id=387, 741.77126pt x 446.66875pt>
+<../img//basis1d_linear.pdf, id=397, 741.77126pt x 446.66875pt>
 File: ../img//basis1d_linear.pdf Graphic file (type pdf)
 <use ../img//basis1d_linear.pdf>
 Package pdftex.def Info: ../img//basis1d_linear.pdf  used on input line 219.
 (pdftex.def)             Requested size: 216.23764pt x 130.20535pt.
-
-[11 <../img//basis1d_linear.pdf>]
-<../img//basis1d_quadratic.pdf, id=398, 741.77126pt x 446.66875pt>
+ [11 <../img//basis1d_linear.pdf>]
+<../img//basis1d_quadratic.pdf, id=408, 741.77126pt x 446.66875pt>
 File: ../img//basis1d_quadratic.pdf Graphic file (type pdf)
 <use ../img//basis1d_quadratic.pdf>
 Package pdftex.def Info: ../img//basis1d_quadratic.pdf  used on input line 266.
 
 (pdftex.def)             Requested size: 216.23764pt x 130.20535pt.
  [12 <../img//basis1d_quadratic.pdf>]
-<../img//basis1d_cubic.pdf, id=408, 755.82375pt x 446.66875pt>
+<../img//basis1d_cubic.pdf, id=418, 755.82375pt x 446.66875pt>
 File: ../img//basis1d_cubic.pdf Graphic file (type pdf)
 <use ../img//basis1d_cubic.pdf>
 Package pdftex.def Info: ../img//basis1d_cubic.pdf  used on input line 320.
 (pdftex.def)             Requested size: 216.23764pt x 127.78581pt.
-<../img//basis1d_compare.pdf, id=410, 723.70375pt x 566.115pt>
+<../img//basis1d_compare.pdf, id=420, 723.70375pt x 566.115pt>
 File: ../img//basis1d_compare.pdf Graphic file (type pdf)
 <use ../img//basis1d_compare.pdf>
 Package pdftex.def Info: ../img//basis1d_compare.pdf  used on input line 332.
 (pdftex.def)             Requested size: 216.23764pt x 169.15338pt.
-<../img//triangle_basis_points.pdf, id=411, 1275.76625pt x 1119.18124pt>
+<../img//triangle_basis_points.pdf, id=421, 1275.76625pt x 1119.18124pt>
 File: ../img//triangle_basis_points.pdf Graphic file (type pdf)
 <use ../img//triangle_basis_points.pdf>
 Package pdftex.def Info: ../img//triangle_basis_points.pdf  used on input line 
 342.
 (pdftex.def)             Requested size: 270.3012pt x 237.11842pt.
 
-
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [13 <../img//basis1d_cubic.pdf> <../img//basis1d_compare.pdf>]
-<../img//basis2d_linear.png, id=423, 375.65344pt x 374.14781pt>
+<../img//basis2d_linear.png, id=433, 375.65344pt x 374.14781pt>
 File: ../img//basis2d_linear.png Graphic file (type png)
 <use ../img//basis2d_linear.png>
 Package pdftex.def Info: ../img//basis2d_linear.png  used on input line 385.
@@ -1146,13 +1151,13 @@ Overfull \hbox (14.90533pt too wide) detected at line 423
  \OT1/cmr/m/n/12 = []
  []
 
-<../img//basis2d_quadratic.png, id=786, 342.5297pt x 378.66469pt>
+<../img//basis2d_quadratic.png, id=796, 342.5297pt x 378.66469pt>
 File: ../img//basis2d_quadratic.png Graphic file (type png)
 <use ../img//basis2d_quadratic.png>
 Package pdftex.def Info: ../img//basis2d_quadratic.png  used on input line 427.
 
 (pdftex.def)             Requested size: 162.18236pt x 179.29558pt.
-<../img//quadrangle_basis_points.pdf, id=787, 2320.67pt x 1283.79625pt>
+<../img//quadrangle_basis_points.pdf, id=797, 2320.67pt x 1283.79625pt>
 File: ../img//quadrangle_basis_points.pdf Graphic file (type pdf)
 <use ../img//quadrangle_basis_points.pdf>
 Package pdftex.def Info: ../img//quadrangle_basis_points.pdf  used on input lin
@@ -1162,7 +1167,7 @@ e 441.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [15 <../img//basis2d_quadratic.png>]
-<../img//basis2d_bilinear.png, id=798, 532.23843pt x 438.8897pt>
+<../img//basis2d_bilinear.png, id=808, 532.23843pt x 438.8897pt>
 File: ../img//basis2d_bilinear.png Graphic file (type png)
 <use ../img//basis2d_bilinear.png>
 Package pdftex.def Info: ../img//basis2d_bilinear.png  used on input line 487.
@@ -1175,7 +1180,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 \openout2 = `eq-geometry.aux'.
 
 (./eq-geometry.tex
-<../img//dxideta.pdf, id=1505, 229.85875pt x 95.35625pt>
+<../img//dxideta.pdf, id=1515, 229.85875pt x 95.35625pt>
 File: ../img//dxideta.pdf Graphic file (type pdf)
 <use ../img//dxideta.pdf>
 Package pdftex.def Info: ../img//dxideta.pdf  used on input line 48.
@@ -1185,19 +1190,19 @@ Package pdftex.def Info: ../img//dxideta.pdf  used on input line 48.
 
 
  <../img//dxideta.pdf>] [19]
-<../img//lintri_transform.pdf, id=1528, 229.85875pt x 95.35625pt>
+<../img//lintri_transform.pdf, id=1538, 229.85875pt x 95.35625pt>
 File: ../img//lintri_transform.pdf Graphic file (type pdf)
 <use ../img//lintri_transform.pdf>
 Package pdftex.def Info: ../img//lintri_transform.pdf  used on input line 157.
 (pdftex.def)             Requested size: 324.36473pt x 134.57016pt.
  [20 <../img//lintri_transform.pdf>]
-<../img//bilinquad_transform.pdf, id=1669, 247.92625pt x 95.35625pt>
+<../img//bilinquad_transform.pdf, id=1679, 247.92625pt x 95.35625pt>
 File: ../img//bilinquad_transform.pdf Graphic file (type pdf)
 <use ../img//bilinquad_transform.pdf>
 Package pdftex.def Info: ../img//bilinquad_transform.pdf  used on input line 22
 0.
 (pdftex.def)             Requested size: 324.36473pt x 124.7648pt.
-<../img//polygon_area.pdf, id=1670, 2126.94624pt x 461.725pt>
+<../img//polygon_area.pdf, id=1680, 2126.94624pt x 461.725pt>
 File: ../img//polygon_area.pdf Graphic file (type pdf)
 <use ../img//polygon_area.pdf>
 Package pdftex.def Info: ../img//polygon_area.pdf  used on input line 234.
@@ -1213,25 +1218,19 @@ le pdfs with page group included in a single page
 \openout2 = `howto-build.aux'.
 
  (./howto-build.tex
-LaTeX Font Info:    Trying to load font information for T2A+cmtt on input line 
-11.
-
-(/usr/share/texmf/tex/latex/cyrillic/t2acmtt.fd
-File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
-)
-Overfull \hbox (16.17488pt too wide) in paragraph at lines 16--18
+Overfull \hbox (16.17488pt too wide) in paragraph at lines 17--19
 [][][]$\T2A/cmtt/m/n/12 https : / / github . com / git-[]for-[]windows / git / 
 releases / download / v2 . 43 . 0 . windows . 1 / Git-[]2 .
  []
 
 
-Overfull \hbox (34.69536pt too wide) in paragraph at lines 18--19
+Overfull \hbox (34.69536pt too wide) in paragraph at lines 19--20
 [][][]$\T2A/cmtt/m/n/12 https : / / github . com / Kitware / CMake / releases /
  download / v3 . 28 . 3 / cmake-[]3 . 28 . 3-[]windows-[]x86 _
  []
 
 
-Overfull \hbox (39.43233pt too wide) in paragraph at lines 31--36
+Overfull \hbox (39.43233pt too wide) in paragraph at lines 32--37
 []\T2A/cmr/m/n/12 Возьмите необ-хо-ди-мые за-го-ло-воч-ные биб-лио-те-ки boost 
 из [][]$\T2A/cmtt/m/n/12 https : / / disk . yandex . ru / d / GwTZUvfAqPsZBQ$[]
 []
@@ -1239,10 +1238,10 @@ Overfull \hbox (39.43233pt too wide) in paragraph at lines 31--36
 
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 42.
+(mdframed)              on input line 43.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 48.
+(mdframed)              on input line 49.
 \openout4 = `cfd_course_25.pyg'.
 
 (./_minted-cfd_course_25/default.pygstyle)
@@ -1252,36 +1251,36 @@ BA7239B680.pygtex) [26
 ]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 69.
-<../img//vs_solution_explorer.png, id=2052, 61.4295pt x 50.3481pt>
+(mdframed)              on input line 70.
+<../img//vs_solution_explorer.png, id=2061, 61.4295pt x 50.3481pt>
 File: ../img//vs_solution_explorer.png Graphic file (type png)
 <use ../img//vs_solution_explorer.png>
 Package pdftex.def Info: ../img//vs_solution_explorer.png  used on input line 8
-5.
+6.
 (pdftex.def)             Requested size: 153.36986pt x 125.71779pt.
-<../img//win_startup_project.png, id=2053, 356.0803pt x 229.60782pt>
+<../img//win_startup_project.png, id=2062, 356.0803pt x 229.60782pt>
 File: ../img//win_startup_project.png Graphic file (type png)
 <use ../img//win_startup_project.png>
-Package pdftex.def Info: ../img//win_startup_project.png  used on input line 97
+Package pdftex.def Info: ../img//win_startup_project.png  used on input line 98
 .
 (pdftex.def)             Requested size: 255.61385pt x 164.8235pt.
  [27 <../img//vs_solution_explorer.png> <../img//win_startup_project.png (PNG c
 opy)>]
-<../img//vscode_launch_json.png, id=2063, 545.78906pt x 380.92313pt>
+<../img//vscode_launch_json.png, id=2072, 545.78906pt x 380.92313pt>
 File: ../img//vscode_launch_json.png Graphic file (type png)
 <use ../img//vscode_launch_json.png>
-Package pdftex.def Info: ../img//vscode_launch_json.png  used on input line 130
+Package pdftex.def Info: ../img//vscode_launch_json.png  used on input line 131
 .
 (pdftex.def)             Requested size: 357.85782pt x 249.75931pt.
-<../img//vscode_launch.png, id=2064, 639.89063pt x 261.22594pt>
+<../img//vscode_launch.png, id=2073, 639.89063pt x 261.22594pt>
 File: ../img//vscode_launch.png Graphic file (type png)
 <use ../img//vscode_launch.png>
-Package pdftex.def Info: ../img//vscode_launch.png  used on input line 147.
+Package pdftex.def Info: ../img//vscode_launch.png  used on input line 148.
 (pdftex.def)             Requested size: 339.76312pt x 138.70418pt.
  [28 <../img//vscode_launch_json.png (PNG copy)>]
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 152.
+(mdframed)              on input line 153.
 \openout4 = `cfd_course_25.pyg'.
 
 
@@ -1292,16 +1291,16 @@ BA7239B680.pygtex)
 
 (./_minted-cfd_course_25/9E416C304496A9E0DC44DE95100E52CB6AD9D9E7D6C70123318B0D
 BA7239B680.pygtex)
-<../img//win_debug_args_1.png, id=2074, 327.47343pt x 422.32782pt>
+<../img//win_debug_args_1.png, id=2083, 327.47343pt x 422.32782pt>
 File: ../img//win_debug_args_1.png Graphic file (type png)
 <use ../img//win_debug_args_1.png>
-Package pdftex.def Info: ../img//win_debug_args_1.png  used on input line 169.
+Package pdftex.def Info: ../img//win_debug_args_1.png  used on input line 171.
 (pdftex.def)             Requested size: 378.42001pt x 488.03178pt.
  [29 <../img//vscode_launch.png (PNG copy)>]
-<../img//win_debug_args_2.png, id=2079, 512.66531pt x 342.5297pt>
+<../img//win_debug_args_2.png, id=2088, 512.66531pt x 342.5297pt>
 File: ../img//win_debug_args_2.png Graphic file (type png)
 <use ../img//win_debug_args_2.png>
-Package pdftex.def Info: ../img//win_debug_args_2.png  used on input line 173.
+Package pdftex.def Info: ../img//win_debug_args_2.png  used on input line 175.
 (pdftex.def)             Requested size: 486.53883pt x 325.07732pt.
  [30 <../img//win_debug_args_1.png (PNG copy)>]
 \openout4 = `cfd_course_25.pyg'.
@@ -1316,18 +1315,18 @@ BA7239B680.pygtex)
 BA7239B680.pygtex)
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 190.
-<../img//release_build.png, id=2085, 179.92218pt x 72.27pt>
+(mdframed)              on input line 192.
+<../img//release_build.png, id=2094, 179.92218pt x 72.27pt>
 File: ../img//release_build.png Graphic file (type png)
 <use ../img//release_build.png>
-Package pdftex.def Info: ../img//release_build.png  used on input line 197.
+Package pdftex.def Info: ../img//release_build.png  used on input line 199.
 (pdftex.def)             Requested size: 255.61385pt x 102.68143pt.
  [31 <../img//win_debug_args_2.png (PNG copy)> <../img//release_build.png (PNG 
 copy)>]
-<../img//release_build_2.png, id=2097, 417.05812pt x 105.39375pt>
+<../img//release_build_2.png, id=2106, 417.05812pt x 105.39375pt>
 File: ../img//release_build_2.png Graphic file (type png)
 <use ../img//release_build_2.png>
-Package pdftex.def Info: ../img//release_build_2.png  used on input line 212.
+Package pdftex.def Info: ../img//release_build_2.png  used on input line 214.
 (pdftex.def)             Requested size: 255.61385pt x 64.59563pt.
 ) [32 <../img//release_build_2.png (PNG copy)>]
 \openout2 = `howto-git.aux'.
@@ -1382,33 +1381,47 @@ Package mdframed Info: mdframed detected package amsthm
 (mdframed)              on input line 80.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 99.
-Package mdframed Info: Not enough space on this page on input line 103.
- [34]
-Package mdframed Info: Not enough space on this page on input line 103.
+(mdframed)              on input line 96.
+
+
+Package mdframed Warning: You got a bad break
+(mdframed)                because the last box will be empty
+(mdframed)                you have to change it manually
+(mdframed)                by changing the text, the space
+(mdframed)                or something else on input line 100.
+
+Package mdframed Info: You first box width is to small
+ mdframed fixed it
+(mdframed)              on input line 100.
+[34]
+
+Package mdframed Warning: You got a bad break
+(mdframed)                because the last split box is empty
+(mdframed)                You have to change the settings on input line 100.
+
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 106.
+(mdframed)              on input line 103.
 Package mdframed Info: mdframed detected package amsthm 
  changed the theorem header of amsthm
-(mdframed)              on input line 115.
+(mdframed)              on input line 112.
 ) [35]
 \openout2 = `howto-paraview.aux'.
 
  (./howto-paraview.tex
-<../img//howto_paraview_1d_1.png, id=2119, 476.53032pt x 338.01282pt>
+<../img//howto_paraview_1d_1.png, id=2128, 476.53032pt x 338.01282pt>
 File: ../img//howto_paraview_1d_1.png Graphic file (type png)
 <use ../img//howto_paraview_1d_1.png>
 Package pdftex.def Info: ../img//howto_paraview_1d_1.png  used on input line 9.
 
 (pdftex.def)             Requested size: 270.3012pt x 191.74092pt.
-<../img//howto_paraview_1d_2.png, id=2120, 390.70969pt x 67.0003pt>
+<../img//howto_paraview_1d_2.png, id=2129, 390.70969pt x 67.0003pt>
 File: ../img//howto_paraview_1d_2.png Graphic file (type png)
 <use ../img//howto_paraview_1d_2.png>
 Package pdftex.def Info: ../img//howto_paraview_1d_2.png  used on input line 13
 .
 (pdftex.def)             Requested size: 270.3012pt x 46.35394pt.
-<../img//howto_paraview_1d_3.png, id=2121, 573.64313pt x 434.37282pt>
+<../img//howto_paraview_1d_3.png, id=2130, 573.64313pt x 434.37282pt>
 File: ../img//howto_paraview_1d_3.png Graphic file (type png)
 <use ../img//howto_paraview_1d_3.png>
 Package pdftex.def Info: ../img//howto_paraview_1d_3.png  used on input line 22
@@ -1420,26 +1433,26 @@ Package pdftex.def Info: ../img//howto_paraview_1d_3.png  used on input line 22
 
  <../img//howto_paraview_1d_1.png (PNG copy)> <../img//howto_paraview_1d_2.png 
 (PNG copy)> <../img//howto_paraview_1d_3.png (PNG copy)>]
-<../img//howto_paraview_1d_4.png, id=2131, 563.10374pt x 603.75563pt>
+<../img//howto_paraview_1d_4.png, id=2140, 563.10374pt x 603.75563pt>
 File: ../img//howto_paraview_1d_4.png Graphic file (type png)
 <use ../img//howto_paraview_1d_4.png>
 Package pdftex.def Info: ../img//howto_paraview_1d_4.png  used on input line 33
 .
 (pdftex.def)             Requested size: 324.36473pt x 347.78323pt.
-<../img//howto_paraview_1d_5.png, id=2132, 1196.21906pt x 618.81187pt>
+<../img//howto_paraview_1d_5.png, id=2141, 1196.21906pt x 618.81187pt>
 File: ../img//howto_paraview_1d_5.png Graphic file (type png)
 <use ../img//howto_paraview_1d_5.png>
 Package pdftex.def Info: ../img//howto_paraview_1d_5.png  used on input line 47
 .
 (pdftex.def)             Requested size: 486.53883pt x 251.69386pt.
  [37 <../img//howto_paraview_1d_4.png (PNG copy)>]
-<../img//howto_paraview_1d_6.png, id=2150, 775.39688pt x 472.01344pt>
+<../img//howto_paraview_1d_6.png, id=2159, 775.39688pt x 472.01344pt>
 File: ../img//howto_paraview_1d_6.png Graphic file (type png)
 <use ../img//howto_paraview_1d_6.png>
 Package pdftex.def Info: ../img//howto_paraview_1d_6.png  used on input line 55
 .
 (pdftex.def)             Requested size: 432.48355pt x 263.27419pt.
-<../img//howto_paraview_1d_7.png, id=2151, 362.85562pt x 373.395pt>
+<../img//howto_paraview_1d_7.png, id=2160, 362.85562pt x 373.395pt>
 File: ../img//howto_paraview_1d_7.png Graphic file (type png)
 <use ../img//howto_paraview_1d_7.png>
 Package pdftex.def Info: ../img//howto_paraview_1d_7.png  used on input line 63
@@ -1447,91 +1460,93 @@ Package pdftex.def Info: ../img//howto_paraview_1d_7.png  used on input line 63
 (pdftex.def)             Requested size: 216.23764pt x 222.52318pt.
  [38 <../img//howto_paraview_1d_5.png (PNG copy)> <../img//howto_paraview_1d_6.
 png (PNG copy)>]
-<../img//howto_paraview_isolines_1.png, id=2158, 884.55469pt x 660.96938pt>
+<../img//howto_paraview_isolines_1.png, id=2168, 884.55469pt x 660.96938pt>
 File: ../img//howto_paraview_isolines_1.png Graphic file (type png)
 <use ../img//howto_paraview_isolines_1.png>
 Package pdftex.def Info: ../img//howto_paraview_isolines_1.png  used on input l
 ine 78.
 (pdftex.def)             Requested size: 378.42001pt x 282.76906pt.
- [39 <../img//howto_paraview_1d_7.png (PNG copy)> <../img//howto_paraview_isoli
-nes_1.png (PNG copy)>]
-<../img//howto_paraview_isolines_2.png, id=2168, 890.5772pt x 488.57532pt>
+
+[39 <../img//howto_paraview_1d_7.png (PNG copy)> <../img//howto_paraview_isolin
+es_1.png (PNG copy)>]
+<../img//howto_paraview_isolines_2.png, id=2177, 890.5772pt x 488.57532pt>
 File: ../img//howto_paraview_isolines_2.png Graphic file (type png)
 <use ../img//howto_paraview_isolines_2.png>
 Package pdftex.def Info: ../img//howto_paraview_isolines_2.png  used on input l
 ine 86.
 (pdftex.def)             Requested size: 378.42001pt x 207.60075pt.
-<../img//howto_paraview_2d_as_3d.png, id=2170, 884.55469pt x 597.73312pt>
+<../img//howto_paraview_2d_as_3d.png, id=2179, 884.55469pt x 597.73312pt>
 File: ../img//howto_paraview_2d_as_3d.png Graphic file (type png)
 <use ../img//howto_paraview_2d_as_3d.png>
 Package pdftex.def Info: ../img//howto_paraview_2d_as_3d.png  used on input lin
 e 104.
 (pdftex.def)             Requested size: 486.53883pt x 328.78159pt.
  [40 <../img//howto_paraview_isolines_2.png (PNG copy)>]
-<../img//howto_paraview_show_labels.png, id=2182, 936.49875pt x 302.63063pt>
+<../img//howto_paraview_show_labels.png, id=2191, 936.49875pt x 302.63063pt>
 File: ../img//howto_paraview_show_labels.png Graphic file (type png)
 <use ../img//howto_paraview_show_labels.png>
 Package pdftex.def Info: ../img//howto_paraview_show_labels.png  used on input 
 line 122.
 (pdftex.def)             Requested size: 432.48355pt x 139.76129pt.
- [41 <../img//howto_paraview_2d_as_3d.png (PNG copy)> <../img//howto_paraview_s
-how_labels.png (PNG copy)>]
-<../img//glyph-1.png, id=2190, 530.73282pt x 536.75531pt>
+
+[41 <../img//howto_paraview_2d_as_3d.png (PNG copy)> <../img//howto_paraview_sh
+ow_labels.png (PNG copy)>]
+<../img//glyph-1.png, id=2199, 530.73282pt x 536.75531pt>
 File: ../img//glyph-1.png Graphic file (type png)
 <use ../img//glyph-1.png>
 Package pdftex.def Info: ../img//glyph-1.png  used on input line 140.
 (pdftex.def)             Requested size: 324.36473pt x 328.0509pt.
-<../img//glyph-2.png, id=2191, 501.37312pt x 335.75438pt>
+<../img//glyph-2.png, id=2200, 501.37312pt x 335.75438pt>
 File: ../img//glyph-2.png Graphic file (type png)
 <use ../img//glyph-2.png>
 Package pdftex.def Info: ../img//glyph-2.png  used on input line 150.
 (pdftex.def)             Requested size: 216.23764pt x 144.80704pt.
  [42 <../img//glyph-1.png (PNG copy)> <../img//glyph-2.png (PNG copy)>]
-<../img//glyph-3.png, id=2204, 502.12593pt x 400.49625pt>
+<../img//glyph-3.png, id=2213, 502.12593pt x 400.49625pt>
 File: ../img//glyph-3.png Graphic file (type png)
 <use ../img//glyph-3.png>
 Package pdftex.def Info: ../img//glyph-3.png  used on input line 163.
 (pdftex.def)             Requested size: 324.36473pt x 258.72449pt.
-<../img//glyph-4.png, id=2205, 733.99219pt x 484.05844pt>
+<../img//glyph-4.png, id=2214, 733.99219pt x 484.05844pt>
 File: ../img//glyph-4.png Graphic file (type png)
 <use ../img//glyph-4.png>
 Package pdftex.def Info: ../img//glyph-4.png  used on input line 172.
 (pdftex.def)             Requested size: 324.36473pt x 213.91702pt.
  [43 <../img//glyph-3.png (PNG copy)> <../img//glyph-4.png (PNG copy)>]
-<../img//howto_paraview_plot_over_line_1.png, id=2218, 465.23813pt x 457.71pt>
+<../img//howto_paraview_plot_over_line_1.png, id=2227, 465.23813pt x 457.71pt>
 File: ../img//howto_paraview_plot_over_line_1.png Graphic file (type png)
 <use ../img//howto_paraview_plot_over_line_1.png>
 Package pdftex.def Info: ../img//howto_paraview_plot_over_line_1.png  used on i
 nput line 193.
 (pdftex.def)             Requested size: 216.23764pt x 212.73517pt.
-<../img//howto_paraview_plot_over_line_3.png, id=2219, 289.08pt x 454.69875pt>
+<../img//howto_paraview_plot_over_line_3.png, id=2228, 289.08pt x 454.69875pt>
 File: ../img//howto_paraview_plot_over_line_3.png Graphic file (type png)
 <use ../img//howto_paraview_plot_over_line_3.png>
 Package pdftex.def Info: ../img//howto_paraview_plot_over_line_3.png  used on i
 nput line 206.
 (pdftex.def)             Requested size: 108.11882pt x 170.06062pt.
-<../img//howto_paraview_plot_over_line_2.png, id=2220, 429.10312pt x 454.69875p
+<../img//howto_paraview_plot_over_line_2.png, id=2229, 429.10312pt x 454.69875p
 t>
 File: ../img//howto_paraview_plot_over_line_2.png Graphic file (type png)
 <use ../img//howto_paraview_plot_over_line_2.png>
 Package pdftex.def Info: ../img//howto_paraview_plot_over_line_2.png  used on i
 nput line 208.
 (pdftex.def)             Requested size: 162.18236pt x 171.8576pt.
-<../img//howto_paraview_plot_over_line_4.png, id=2221, 258.9675pt x 136.25906pt
+<../img//howto_paraview_plot_over_line_4.png, id=2230, 258.9675pt x 136.25906pt
 >
 File: ../img//howto_paraview_plot_over_line_4.png Graphic file (type png)
 <use ../img//howto_paraview_plot_over_line_4.png>
 Package pdftex.def Info: ../img//howto_paraview_plot_over_line_4.png  used on i
 nput line 221.
 (pdftex.def)             Requested size: 108.11882pt x 56.88742pt.
-<../img//howto_paraview_plot_over_line_5.png, id=2222, 243.15843pt x 265.74281p
+<../img//howto_paraview_plot_over_line_5.png, id=2231, 243.15843pt x 265.74281p
 t>
 File: ../img//howto_paraview_plot_over_line_5.png Graphic file (type png)
 <use ../img//howto_paraview_plot_over_line_5.png>
 Package pdftex.def Info: ../img//howto_paraview_plot_over_line_5.png  used on i
 nput line 223.
 (pdftex.def)             Requested size: 162.18236pt x 177.24388pt.
-<../img//howto_paraview_plot_over_line_6.png, id=2223, 283.81032pt x 170.13562p
+<../img//howto_paraview_plot_over_line_6.png, id=2232, 283.81032pt x 170.13562p
 t>
 File: ../img//howto_paraview_plot_over_line_6.png Graphic file (type png)
 <use ../img//howto_paraview_plot_over_line_6.png>
@@ -1545,8 +1560,7 @@ howto_paraview_plot_over_line_5.png (PNG copy)> <../img//howto_paraview_plot_ov
 er_line_6.png (PNG copy)>]
 \openout2 = `howto-hybmesh.aux'.
 
-
-(./howto-hybmesh.tex
+ (./howto-hybmesh.tex
 Overfull \hbox (14.4003pt too wide) in paragraph at lines 9--12
 \T2A/cmr/m/n/12 Инсталлятор про-грам-мы сле-ду-ет ска-чать по ссыл-ке [][]$\T2A
 /cmtt/m/n/12 https : / / github . com / kalininei / HybMesh / releases$[][]
@@ -1593,15 +1607,15 @@ Package mdframed Info: mdframed detected package amsthm
 ) (./eq-basis.aux) (./eq-geometry.aux) (./howto-build.aux)
 (./howto-git.aux) (./howto-paraview.aux) (./howto-hybmesh.aux))
 Package rerunfilecheck Info: File `cfd_course_25.out' has not changed.
-(rerunfilecheck)             Checksum: 7D73E9E4417F6220DC76F265D5D0B46C;14308.
+(rerunfilecheck)             Checksum: EE769BC7753A14008FABDFB2635847D5;14638.
 runsystem(rm cfd_course_25.pyg)...executed.
 
  ) 
 Here is how much of TeX's memory you used:
- 20423 strings out of 479515
- 345623 string characters out of 5877293
- 768288 words of memory out of 5000000
- 37003 multiletter control sequences out of 15000+600000
+ 20431 strings out of 479515
+ 345727 string characters out of 5877293
+ 768542 words of memory out of 5000000
+ 37008 multiletter control sequences out of 15000+600000
  417435 words of font info for 64 fonts, out of 8000000 for 9000
  891 hyphenation exceptions out of 8191
  89i,16n,93p,634b,602s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1621,10 +1635,10 @@ exmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/pub
 lic/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfit120
 0.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/te
 xmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on cfd_course_25.pdf (47 pages, 3457541 bytes).
+Output written on cfd_course_25.pdf (47 pages, 3459262 bytes).
 PDF statistics:
- 2374 PDF objects out of 2487 (max. 8388607)
- 1752 compressed objects within 18 object streams
- 256 named destinations out of 1000 (max. 500000)
- 640 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2384 PDF objects out of 2487 (max. 8388607)
+ 1762 compressed objects within 18 object streams
+ 259 named destinations out of 1000 (max. 500000)
+ 648 words of extra memory for PDF output out of 10000 (max. 10000000)
 

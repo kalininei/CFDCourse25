@@ -1,5 +1,6 @@
 \babel@toc {russian}{}
 \contentsline {section}{\numberline {1}Лекция 1 (02.09)}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Задание для самостоятельной работы}{3}{subsection.1.1}%
 \contentsline {section}{\numberline {A}Формулы и обозначения}{4}{appendix.A}%
 \contentsline {subsection}{\numberline {A.1}Векторы}{5}{subsection.A.1}%
 \contentsline {subsubsection}{\numberline {A.1.1}Обозначение}{5}{subsubsection.A.1.1}%
