@@ -3,6 +3,7 @@ set (SRC
 	grid_test.cpp
 	mat_test.cpp
 	geom_test.cpp
+	poisson_fdm_solve_test.cpp
 
 	utils/filesystem.cpp
 	utils/vecmat.cpp
