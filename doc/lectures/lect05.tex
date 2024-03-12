@@ -1,0 +1,201 @@
+\section{Лекция 5 (09.03)}
+\subsection{Решение СЛАУ}
+
+В рассмотренных ранее примерах использовался алгебраический
+многосеточный итерационный решатель, который имеет существенное время
+инициализации. Ниже рассмотрим некоторые более простые итерационные способы решения систем
+уравнений, которые, хотя и имеют значительно худшую сходимость, но не требуют дорогой инициализации.
+
+\subsubsection{Метод Якоби}
+\label{sec:SLAE-Jacobi}
+
+Будем рассматривать систему уравнений вида
+\begin{equation*}
+    \sum_{j=0}^{N-1} A_{ij} u_j = r_i, \quad i = \overline{0, N-1}
+\end{equation*}
+относительно неизвестного сеточного вектора $\{u\}$.
+
+В классическом виде алгоритм Якоби формулируется в виде
+\begin{equation*}
+    \hat u_i = \frac{1}{A_{ii}}\left(r_i - \sum_{j\neq i} A_{ij}{u_j}\right)
+\end{equation*}
+
+Произведём некоторые преобразования
+\begin{align*}
+    \hat u_i &= \frac{1}{A_{ii}}\left(r_i - \sum_{j} A_{ij}{u_j} + A_{ii}u_i\right) \\
+             &= u_i + \frac{1}{A_{ii}}\left(r_i - \sum_{j} A_{ij}{u_j}\right)
+\end{align*}
+
+Таким образом, программировать итерацию этого алгоритма, обновляющую значения массива $\{u\}$, можно в виде
+\begin{align*}
+    &\hat u = u; \\
+    &\textbf{for } i=\overline{0, N-1} \\ 
+    &\quad \hat u_i \mathrel{{+}{=}} \frac{1}{A_{ii}}\left(r_i - \sum_{j=0}^{N-1} A_{ij}{u_j}\right)\\
+    &\textbf{endfor} \\
+    & u = \hat u; \\
+\end{align*}
+
+
+\subsubsection{Метод Зейделя}
+\label{sec:SLAE-Seidel}
+Формулируется в виде
+\begin{equation*}
+    \hat u_i = \frac{1}{A_{ii}}\left(r_i - \sum_{j<i} A_{ij}{\hat u_j} - \sum_{j>i} A_{ij}{u_j} \right).
+\end{equation*}
+
+Поскольку этот метод неявный относительно уже найденных на итерации значений, то в отличии от метода Якоби этот алгоритм не требует создания временного массива $\hat u$
+при программировании. Псевдокод для реализации итерации этого метода можно записать как
+
+\begin{align*}
+    &\textbf{for } i=\overline{0, N-1} \\ 
+    &\quad u_i \mathrel{{+}{=}} \frac{1}{A_{ii}}\left(r_i - \sum_{j=0}^{N-1} A_{ij}{u_j}\right)\\
+    &\textbf{endfor}
+\end{align*}
+
+
+\subsubsection{Метод последовательных верхних релаксаций (SOR)}
+\label{sec:SLAE-SOR}
+Этот метод основан на добавлении к решению результатов итераций Зейделя с
+коэффициентом $\omega > 1$. То есть он изменияет решение по тому же
+принципу, что и метод Зейделя, но искуственно увеличивает эту добавку.
+
+Формулируется этот метод в виде
+\begin{equation*}
+    \hat u_i = (1-\omega) u_i + \frac{\omega}{A_{ii}}\left(r_i - \sum_{j<i} A_{ij}{\hat u_j} - \sum_{j>i} A_{ij}{u_j} \right).
+\end{equation*}
+Для устойчивости метода необходимо $\omega < 2$. В частности, для одномерных задач,
+заданных на единичном отрезке, для оптимальной сходимости можно использовать соотношение $\omega \approx 2 - 5 h$,
+где $h$ -- шаг сетки.
+
+Итерация этого метода по аналогии с методом Зейделя может быть запрограммирована в виде
+
+\begin{align*}
+    &\textbf{for } i=\overline{0, N-1} \\ 
+    &\quad u_i \mathrel{{+}{=}} \frac{\omega}{A_{ii}}\left(r_i - \sum_{j=0}^{N-1} A_{ij}{u_j}\right)\\
+    &\textbf{endfor}
+\end{align*}
+
+\subsection{Задание для самостоятельной работы}
+
+Вернутся к рассмотрению двумерного уравнения Пуассона (п.~\ref{sec:hw_poisson_2d}).
+Прошлая реализация этой задачи
+включала в себя решение СЛАУ алгебраическим многосеточным методом
+с помощью класса \cvar{AmgcMatrixSolver}:
+\begin{cppcode}
+	AmgcMatrixSolver solver;
+	solver.set_matrix(mat);
+	solver.solve(rhs, u);
+\end{cppcode}
+
+Необходимо реализовать рассмотренные ранее методы
+итерационного решения СЛАУ
+
+\begin{itemize}
+\item метод Якоби (\ref{sec:SLAE-Jacobi}),
+\item метод Зейделя (\ref{sec:SLAE-Seidel}),
+\item метод SOR (\ref{sec:SLAE-SOR}).
+\end{itemize}
+и использовать их вместо многосеточного решателя.
+
+Реализовать означенные решатели нужно в виде функций вида:
+\begin{cppcode}
+// Single Jacobi iteration for mat*u = rhs SLAE. Writes result into u
+void jacobi_step(const cfd::CsrMatrix& mat, const std::vector<double>& rhs, std::vector<double>& u){
+    ...
+}
+\end{cppcode}
+которые делают одну итерацию соответствующего метода без проверок на сходимость.
+Аргумент \cvar{u} используется как начальное значение искомого сеточного вектора. Туда же пишется 
+итоговый результат.
+
+Все алгоритмы основаны на вычислении выражения вида
+\begin{equation*}
+   \frac{1}{A_{ii}}\left(r_i - \sum_{j=0}^{N-1} A_{ij}{u_j}\right),
+\end{equation*}
+поэтому рекомендуется выделить отдельную функцию, которая бы вычисляла это выражение
+и использовалась всеми тремя решателями
+\begin{minted}[linenos=false]{c++}
+double row_diff(size_t irow, const cfd::CsrMatrix& mat, const std::vector<double>& rhs, const std::vector<double>& u){
+	const std::vector<size_t>& addr = mat.addr();   // массив адресов
+	const std::vector<size_t>& cols = mat.cols();   // массив колонок
+	const std::vector<double>& vals = mat.vals();   // массив значений
+    ...
+}
+\end{minted}
+
+Дополнительно понадобится реализовать функцию, которая проверяет сходимость решения
+путём вычисления невязки вида
+\begin{equation*}
+res = \max_i{\left| \sum_{j}A_{ij} u_j - r_i \right|}
+\end{equation*}
+и сравнения с заданным малым числом $\eps=10^{-8}$.
+\begin{cppcode}
+bool is_converged(const cfd::CsrMatrix& mat, const std::vector<double>& rhs, const std::vector<double>& x){
+	constexpr double EPS = 1e-8;
+	double residual = 0;
+	// ...
+	return residual < EPS;
+}
+\end{cppcode}
+
+Для реализации вспомогательных функций необходимо
+использоватть алгоритмы работы с CSR-матрицами из п.~\ref{sec:csr}
+
+При реализации метода SOR подобрать оптимальный параметр $\omega$,
+при котором метод SOR сойдётся за минимальное число итераций.
+
+После реализации всех методов необходимо
+сравнить время исполнения решателей. Замеры нужно проводить в Release-версии сборки.
+Для замера времени исполнения участка кода воспользоваться функциями
+\begin{itemize}
+\item \cvar{cfd::dbg::Tic} -- вызвать до начала участка кода
+\item \cvar{cfd::dbg::Toc} -- вызвать после окончания участка кода
+\end{itemize}
+
+Код решения СЛАУ методом Якоби с вызовами профилироващика
+должен иметь примерно такой вид:
+\begin{cppcode}
+#include "dbg/tictoc.hpp"
+using namespace cfd;
+
+...
+
+// реализация решения СЛАУ
+dbg::Tic("total");  // запустить таймер total
+for (size_t it=0; it < max_it; ++it){
+	dbg::Tic("step");  // запустить таймер step
+	jacobi_step(mat, rhs, u);
+	dbg::Toc("step");  // остановить таймер step
+
+	dbg::Tic("conv-check");  // запустить таймер conv-check
+	bool is_conv = is_converged(mat, rhs, u);
+	dbg::Toc("conv-check");  // остановить таймер conv-check
+
+	if (is_conv) break;
+}
+dbg::Toc("total");  // остановить таймер total
+\end{cppcode}
+
+При правильном задании функций замеров, по окончанию работы в консоль должен напечататься отчёт о времени исполнения вида:
+\begin{shelloutput}
+     total:  6.670 sec
+      step:  5.220 sec
+conv-check:  1.210 sec
+\end{shelloutput}
+
+По результатам профилировки нужно заполнить таблицу
+
+\begin{equation*}
+\begin{array}{l|c|c|c|c|c|c}
+    Метод & \text{total, s} & \text{step, s} & \text{conv-check, s} & \text{Кол-во итераций} \\
+    \hline
+    \text{Amg} &   & - & - & - \\
+    \hline
+    \text{Якоби} &   &  &  & \\
+    \hline
+    \text{Зейдель} &   &  &  & \\
+    \hline
+    \text{SOR} (\omega=...)&   &   & & \\
+\end{array}
+\end{equation*}
+Здесь Amg - исходный решатель.
