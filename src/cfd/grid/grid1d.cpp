@@ -63,9 +63,9 @@ std::array<size_t, 2> Grid1D::tab_face_cell(size_t iface) const{
 	if (iface == 0){
 		return {INVALID_INDEX, 0};
 	} else if (iface == _points.size()-1){
-		return {iface, INVALID_INDEX};
+		return {iface-1, INVALID_INDEX};
 	} else {
-		return {iface, iface+1};
+		return {iface-1, iface};
 	}
 }
 

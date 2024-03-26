@@ -28,11 +28,10 @@
 
 Таким образом, программировать итерацию этого алгоритма, обновляющую значения массива $\{u\}$, можно в виде
 \begin{align*}
-    &\hat u = u; \\
+    &\check u = u; \\
     &\textbf{for } i=\overline{0, N-1} \\ 
-    &\quad \hat u_i \mathrel{{+}{=}} \frac{1}{A_{ii}}\left(r_i - \sum_{j=0}^{N-1} A_{ij}{u_j}\right)\\
+    &\quad u_i \mathrel{{+}{=}} \frac{1}{A_{ii}}\left(r_i - \sum_{j=0}^{N-1} A_{ij}{\check u_j}\right)\\
     &\textbf{endfor} \\
-    & u = \hat u; \\
 \end{align*}
 
 
@@ -145,7 +144,7 @@ bool is_converged(const cfd::CsrMatrix& mat, const std::vector<double>& rhs, con
 при котором метод SOR сойдётся за минимальное число итераций.
 
 После реализации всех методов необходимо
-сравнить время исполнения решателей. Замеры нужно проводить в Release-версии сборки.
+сравнить время исполнения решателей. Замеры нужно проводить в Release-версии сборки (см. п.~\ref{sec:release-build}).
 Для замера времени исполнения участка кода воспользоваться функциями
 \begin{itemize}
 \item \cvar{cfd::dbg::Tic} -- вызвать до начала участка кода

@@ -11,6 +11,7 @@ using namespace cfd;
 // Poisson 1D solver
 ///////////////////////////////////////////////////////////////////////////////
 
+namespace{
 class TestPoisson1Worker{
 public:
 	// u(x) = sin(10*x^2)
@@ -107,9 +108,10 @@ private:
 		return std::sqrt(sum / len);
 	}
 };
+}
 
-TEST_CASE("Poisson 1D solver", "[poisson1]"){
-	std::cout << std::endl << "--- [poisson1] --- " << std::endl;
+TEST_CASE("Poisson 1D solver, Finite Difference Method", "[poisson1-fdm]"){
+	std::cout << std::endl << "--- [poisson1-fdm] --- " << std::endl;
 
 	// precalculated norm2 results for some n_cells values
 	// used for CHECK procedures
@@ -128,7 +130,7 @@ TEST_CASE("Poisson 1D solver", "[poisson1]"){
 		double n2 = worker.solve();
 
 		// save into poisson1_ncells={n_cells}.vtk
-		worker.save_vtk("poisson1_n=" + std::to_string(n_cells) + ".vtk");
+		worker.save_vtk("poisson1_fdm_n=" + std::to_string(n_cells) + ".vtk");
 
 		// print (N_CELLS, NORM2) table entry
 		std::cout << n_cells << " " << n2 << std::endl;
