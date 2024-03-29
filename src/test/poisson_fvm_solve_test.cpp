@@ -75,14 +75,14 @@ public:
 		_grid.save_vtk(filename);
 		
 		// save numerical solution
-		VtkUtils::add_point_data(_u, "numerical", filename);
+		VtkUtils::add_cell_data(_u, "numerical", filename);
 
 		// save exact solution
-		std::vector<double> exact(_grid.n_points());
-		for (size_t i=0; i<_grid.n_points(); ++i){
-			exact[i] = exact_solution(_grid.point(i).x());
+		std::vector<double> exact(_grid.n_cells());
+		for (size_t i=0; i<_grid.n_cells(); ++i){
+			exact[i] = exact_solution(_grid.cell_center(i));
 		}
-		VtkUtils::add_point_data(exact, "exact", filename);
+		VtkUtils::add_cell_data(exact, "exact", filename);
 	}
 
 private:
