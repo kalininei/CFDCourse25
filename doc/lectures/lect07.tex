@@ -1,0 +1,91 @@
+\section{Лекция 7 (30.03)}
+
+\subsection{Граничные условия второго рода}
+Учёт условий второго рода тривиален.
+Если на центре грани $\Gamma_{is}$ задано 
+значение нормальной производной
+\begin{equation}
+\label{eq:fvm_bc2_approx}
+\vec x \in \Gamma_{is}: \quad \dfr{u}{n} = q(\vec x),
+\end{equation}
+то это значение просто подставляется вместо соответствующей производной
+в  \cref{eq:fvm_gamma_integral}.
+
+По аналогии с \eqref{eq:fvm_assem_bc1}
+учёт граничных условий второго рода
+при сборке по граням будет иметь следующий вид
+\begin{equation}
+\label{eq:fvm_assem_bc2}
+\begin{array}{ll}
+\textbf{for } s \in\textrm{bnd2}                         & \textrm{-- грани с условиями второго рода}\\ 
+\qquad i = \textrm{nei\_cells(s)}                        & \textrm{-- соседняя с граничной гранью ячейка}\\
+\qquad b_{i} \pluseq |\Gamma_{is}| q                     & \\
+\textbf{endfor}                                          & \\
+\end{array}
+\end{equation}
+
+
+\subsection{Граничные условия третьего рода}
+Теперь рассмотрим условия третьего рода
+\begin{equation}
+\label{eq:fvm_bc3}
+\vec x \in \Gamma_{is}: \quad \dfr{u}{n} = \alpha(\vec x) u + \beta(\vec x).
+\end{equation}
+Распишем производную в форме \cref{eq:fvm_bc1_approx}:
+\begin{equation*}
+\frac{u^\Gamma - u_i}{h_{is}} = \alpha u^\Gamma + \beta,
+\end{equation*}
+откуда выразим $u^\Gamma$:
+$$
+u^\Gamma =  \frac{u_i + \beta h_{is}}{1 - \alpha h_{is}}.
+$$
+Подставляя это выражение в исходное граничное условие \eqref{eq:fvm_bc3} получим
+\begin{equation}
+\label{eq:fvm_bc3_approx}
+\dfr{u}{n} = \frac{\alpha}{1 - \alpha h_{is}} u_i + \frac{\beta}{1 - \alpha h_{is}}.
+\end{equation}
+
+Учёт граничных условий третьего рода при сборке по граням будет иметь вид
+
+\begin{equation}
+\label{eq:fvm_assem_bc3}
+\begin{array}{ll}
+\textbf{for } s \in\textrm{bnd3}                         & \textrm{-- грани с условиями третьего рода}\\ 
+\qquad i = \textrm{nei\_cells(s)}                        & \textrm{-- соседняя с граничной гранью ячейка}\\
+\qquad v = \sfrac{|\Gamma_{is}|}{(1 + \alpha h_{is})}    & \\
+\qquad A_{ii} \minuseq  \alpha v                         & \\ 
+\qquad b_{i} \pluseq \beta v                             & \\
+\textbf{endfor}                                          &
+\end{array}
+\end{equation}
+
+\subsubsection{Универсальность условий третьего рода}
+Условие третьего рода
+\eqref{eq:fvm_bc3}
+можно использовать для моделирования условий первого и второго рода.
+Так, условия второго рода \cref{eq:fvm_bc2_approx} получаются, если положить $\alpha = 0$, $\beta = q$.
+А условия первого \cref{eq:fvm_bc1}, -- если
+\begin{equation}
+\label{eq:fvm_bc3_universal}
+\alpha = \eps^{-1}, \quad \beta = -\eps^{-1}u^\Gamma
+\end{equation}
+, где $\eps$ -- малое положительное число.
+
+Если подставить эти выражения в формулу \cref{eq:fvm_bc3_approx}, то можно убедится,
+что они дадут выражения \cref{eq:fvm_bc1_approx} и \cref{eq:fvm_bc2_approx} (в пределе при $\eps \to 0$)
+соответственно.
+
+\subsection{Задание для самостоятельной работы}
+Сделать задачу, аналогичную п.~\ref{sec:hw_fvm2d}, 
+но использовать граничные условия 3-его рода.
+Необходимо имитировать условия первого рода через подход (\ref{eq:fvm_bc3_universal}).
+
+По формуле
+$$
+n = \sqrt{\dfrac{\sum_i (u_i - u'_i)^2 V_i}{\sum_i V_i}}
+$$
+подсчитать норму отклонения численного решения $u_i$ задачи с использованием истинных граничных условий первого рода \eqref{eq:fvm_bc1_approx}
+от численного решения $u'$ задачи, расчитанной с имитицией граничных условий первого рода через граничные условия третьего рода
+\cref{eq:fvm_bc3_approx,eq:fvm_bc3_universal}.
+
+Нарисовать график $n(\eps)$ для расчётов на структурированной и скошенной сетках (в логарифмических координатах).

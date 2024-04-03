@@ -157,7 +157,8 @@ TODO
 
 \subsubsubsection{Функция верхнего уровня}
 объявлена как
-\clisting{line}{"TEST_CASE(\"Poisson 1D solver\", \"[poisson1]\")"}
+%\clisting{line}{"TEST_CASE(\"Poisson 1D solver\", \"[poisson1]\")"}
+\clisting{line}{", \"[poisson1-fdm]\")"}
 В программе в цикле по набору разбиений \cvar{n_cells}
 \clisting{line}{"for (size_t n_cells"}
 создаётся решатель для тестовой задачи, использующий заданное число ячеек
