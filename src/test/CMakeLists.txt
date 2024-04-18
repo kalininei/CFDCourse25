@@ -5,6 +5,7 @@ set (SRC
 	geom_test.cpp
 	poisson_fdm_solve_test.cpp
 	poisson_fvm_solve_test.cpp
+	fvm_assembly_test.cpp
 
 	utils/filesystem.cpp
 	utils/vecmat.cpp

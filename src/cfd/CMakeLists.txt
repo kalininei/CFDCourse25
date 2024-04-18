@@ -24,6 +24,8 @@ set (SRC
 	debug/printer.cpp
 	debug/saver.cpp
 	debug/tictoc.cpp
+
+	fvm/fvm_assembler.cpp
 )
 
 set (HEADERS
@@ -58,6 +60,8 @@ set (HEADERS
 	debug/printer.hpp
 	debug/saver.hpp
 	debug/tictoc.hpp
+
+	fvm/fvm_assembler.cpp
 )
 
 add_library(${CFD_TARGET} STATIC ${SRC} ${HEADERS})
