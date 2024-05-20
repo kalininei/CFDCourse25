@@ -99,3 +99,19 @@ TEST_CASE("Fvm linform 2d", "[fvm-linform-2d]"){
 	}
 	CHECK(passed);
 }
+
+TEST_CASE("a", "[.a]"){
+	RegularGrid2D grid(0, 1, 0, 1, 10, 10);
+
+	FvmLinformFacesDn faces_dn(grid);
+	for (size_t iface=0; iface<grid.n_faces(); ++iface){
+		auto m2 = faces_dn.linear_combination(iface);
+		//auto ed = grid.tab_face_cell(iface);
+		//std::cout << iface << " " << ed[0] << "|" << ed[1] << ": ";
+		std::cout << m2[0].first << "/" << m2[0].second << ", ";
+		std::cout << m2[1].first << "/" << m2[1].second << ", ";
+		std::cout << m2[2].first << "/" << m2[2].second << ", ";
+		std::cout << m2[3].first << "/" << m2[3].second;
+		std::cout << std::endl;
+	}
+}

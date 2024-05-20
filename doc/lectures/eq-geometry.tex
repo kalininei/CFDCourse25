@@ -123,6 +123,12 @@ $$
 dx\,dy = |J|\,d\xi\,d\eta
 \end{equation}
 
+Многомерным обобщением этой формулы будет
+\begin{equation}
+\label{eq:vec_dx_dxi}
+d\vec x = |J|\,d\vec \xi
+\end{equation}
+
 \subsubsubsection{Дифференцирование в параметрической плоскости}
 Пусть задана некоторая функция $f(x, y)$. Распишем её производную по
 параметрическим координатам:
@@ -185,16 +191,21 @@ J^T
   \end{array}
 \right)
 \end{equation*}
+В многомерном виде запишем
+\begin{equation}
+\label{eq:vec_grad_dx}
+\nabla_{\vec x} f = \left(J^T\right)^{-1} \nabla_{\vec \xi} f.
+\end{equation}
 
 \subsubsubsection{Интегрирование в параметрической плоскости}
-Пусть в физической области $x, y$ задана область $D_x$.
-Интеграл функции $f(x, y)$ по этой области
-можно расписать, используя замену \cref{eq:dxdy_dxideta}
+Пусть в физической области $\vec x$ задана область $D_x$.
+Интеграл функции $f(\vec x)$ по этой области
+можно расписать, используя замену \cref{eq:vec_dx_dxi}
 \begin{equation}
 \label{eq:dxideta_integral}
-\int\limits_{D_{x}}f(x, y)\,dxdy = \int\limits_{D_{\xi}}f(\xi, \eta) \, |J(\xi, \eta)|d\xi d\eta,
+\int\limits_{D_{x}}f(\vec x)\,d\vec x = \int\limits_{D_{\xi}}f(\vec \xi) \, |J(\vec \xi)|d\vec \xi,
 \end{equation}
-где $f(\xi, \eta) = f(x(\xi, \eta), y(\xi, \eta))$, а $D_\xi$ -- образ области $D_x$ в параметрической плоскости.
+где $f(\vec \xi) = f(\vec x(\vec \xi))$, а $D_\xi$ -- образ области $D_x$ в параметрической плоскости.
 
 \subsubsubsection{Двумерное линейное преобразование. Параметрический треугольник}
 \label{sec:lintri_transform}

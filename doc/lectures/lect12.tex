@@ -1,0 +1,18 @@
+\section{Лекция 12 (04.05)}
+\subsection{Поэлементная сборка конечноэлементных матриц}
+\subsubsubsection{Элементные матрицы}
+Матрица масс
+\begin{equation}
+\label{eq:fem_mass_matrix}
+m^k_{ij} = \arint{\phi_i(\vec x) \phi_j(\vec x)}{E^k}{\vec x}
+\end{equation}
+Вектор нагрузок
+\begin{equation}
+\label{eq:fem_load_vector}
+l^k_{i} = \arint{\phi_i(\vec x)}{E^k}{\vec x}
+\end{equation}
+Матрица жёсткости
+\begin{equation}
+\label{eq:fem_stiff_matrix}
+s^k_{ij} = \arint{\nabla \phi_i \cdot \nabla \phi_j}{E^k}{\vec x}
+\end{equation}

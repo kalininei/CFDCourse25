@@ -152,13 +152,18 @@ C_i u_i + (C_j - \alpha) u_j + C_k u_k + C_s u_s = \beta.
 \textbf{for } s \in\textrm{faces}                                & \textrm{-- цикл по всем граням}\\ 
 \qquad i,j,k,s = \textrm{dn\_cells(s)}                           & \textrm{-- индексы точек коллокации для аппроксимации $\dsfr{u}{n}$}\\
 \qquad v_i,v_j,v_k,v_s = \textrm{dn\_coefs(s)}                   & \textrm{-- коэф-ты линейной формы для аппроксимации $\dsfr{u}{n}$ }\\
+\qquad a = \textrm{face\_area}(s)                                & \textrm{-- площадь грани}\\
 \qquad \textbf{if } i \textrm{ is cell center }                  & \textrm{-- если $i$ -- коллокация для центра ячейки}\\
-\qquad \qquad A_{ii} \minuseq  v_i; \quad A_{ij} \minuseq  v_j;    & \textrm{-- $i$-ая строка матрицы (против нормали к грани)}\\ 
-\qquad \qquad A_{ik} \minuseq v_k; \quad A_{is} \minuseq v_s;      & \\
+\qquad \qquad A_{ii} \minuseq  a\,v_i;                           & \textrm{-- $i$-ая строка матрицы (против нормали к грани)}\\ 
+\qquad \qquad A_{ij} \minuseq  a\,v_j;                           & \\ 
+\qquad \qquad A_{ik} \minuseq  a\,v_k;                           & \\
+\qquad \qquad A_{is} \minuseq  a\,v_s;                           & \\
 \qquad \textbf{endif}                                            & \\
 \qquad \textbf{if } j \textrm{ is cell center }                  & \textrm{-- если $j$ -- коллокация для центра ячейки}\\
-\qquad \qquad A_{ji} \pluseq  v_i; \quad A_{jj} \pluseq  v_j;  & \textrm{-- $j$-ая строка матрицы (по нормали к грани)}\\ 
-\qquad \qquad A_{jk} \pluseq v_k; \quad A_{js} \pluseq v_s;    & \\
+\qquad \qquad A_{ji} \pluseq a\,v_i;                             & \textrm{-- $j$-ая строка матрицы (по нормали к грани)}\\ 
+\qquad \qquad A_{jj} \pluseq a\,v_j;                             & \\ 
+\qquad \qquad A_{jk} \pluseq a\,v_k;                             & \\
+\qquad \qquad A_{js} \pluseq a\,v_s;                             & \\
 \qquad \textbf{endif}                                            & \\
 \textbf{endfor}                                                  & \\
 \end{array}
@@ -174,7 +179,7 @@ C_i u_i + (C_j - \alpha) u_j + C_k u_k + C_s u_s = \beta.
 \qquad i,j,k,s = \textrm{dn\_cells(s)}                   & \textrm{-- индексы точек коллокации для аппроксимации $\dsfr{u}{n}$}\\
 \qquad v_i,v_j,v_k,v_s = \textrm{dn\_coefs(s)}           & \textrm{-- коэф-ты линейной формы для аппроксимации $\dsfr{u}{n}$ }\\
 \qquad \textbf{if } j \textrm{ is cell center}           & \\
-\qquad \qquad swap(i, j)                                 & \textrm{-- переворачиваем нормаль. Теперь $j$ -- коллокация по грани} \\
+\qquad \qquad \textrm{swap}(i, j)                        & \textrm{-- переворачиваем нормаль. Теперь $j$ -- коллокация по грани} \\
 \qquad \qquad v_i = -v_i, \quad v_j = -v_j               & \\
 \qquad \qquad v_k = -v_k, \quad v_s = -v_s               & \\
 \qquad \textbf{endif}                                    & \\
