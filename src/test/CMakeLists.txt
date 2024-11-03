@@ -7,6 +7,7 @@ set (SRC
 	poisson_fvm_solve_test.cpp
 	poisson_fem_solve_test.cpp
 	fvm_assembly_test.cpp
+	transport_solve_test.cpp
 
 	utils/filesystem.cpp
 	utils/vecmat.cpp
