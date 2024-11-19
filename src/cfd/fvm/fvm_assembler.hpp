@@ -12,7 +12,7 @@ namespace cfd{
 
 struct FvmExtendedCollocations{
 public:
-	FvmExtendedCollocations(const IGrid& grid);
+	explicit FvmExtendedCollocations(const IGrid& grid);
 
 	std::vector<Point> points;
 	std::vector<size_t> cell_collocations;
@@ -55,7 +55,7 @@ private:
 
 /// DfDn on faces computer
 struct FvmFacesDn{
-	FvmFacesDn(const IGrid& grid);
+	explicit FvmFacesDn(const IGrid& grid);
 	FvmFacesDn(const IGrid& grid, const FvmExtendedCollocations& colloc);
 
 	/// computes dfdn for each grid face
@@ -74,7 +74,7 @@ private:
 struct FvmLinformFacesDn{
 	using linform_t = std::vector<std::pair<size_t, double>>;
 
-	FvmLinformFacesDn(const IGrid& grid);
+	explicit FvmLinformFacesDn(const IGrid& grid);
 	FvmLinformFacesDn(const IGrid& grid, const FvmExtendedCollocations& colloc);
 
 	/// returns dfdn as a linear combination of collocation values

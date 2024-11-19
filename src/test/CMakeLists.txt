@@ -9,7 +9,8 @@ set (SRC
 	fvm_assembly_test.cpp
 	transport_solve_test.cpp
 	transport_fvm_solve_test.cpp
-
+	convdiff_fem_test.cpp
+	
 	utils/filesystem.cpp
 	utils/vecmat.cpp
 )

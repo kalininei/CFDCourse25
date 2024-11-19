@@ -28,6 +28,7 @@ set (SRC
 	fvm/fvm_assembler.cpp
 
 	fem/fem_assembler.cpp
+	fem/fem_element.cpp
 	fem/fem_numeric_integrals.cpp
 	fem/fem_sorted_cell_info.cpp
 	fem/elem1d/segment_linear.cpp

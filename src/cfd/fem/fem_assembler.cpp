@@ -94,6 +94,20 @@ std::vector<double> FemAssembler::local_vector(size_t ielem, const std::vector<d
 	return ret;
 }
 
+std::vector<Vector> FemAssembler::local_vector(
+		size_t ielem,
+		const std::vector<double>& vx,
+		const std::vector<double>& vy,
+		const std::vector<double>& vz) const{
+	
+
+	std::vector<Vector> ret;
+	for (size_t bas: _tab_elem_basis[ielem]){
+		ret.push_back({vx[bas], vy[bas], vz[bas]});
+	}
+	return ret;
+}
+
 void FemAssembler::add_to_global_matrix(double coef, size_t ielem, const std::vector<double>& local_matrix, std::vector<double>& global_csr_vals) const{
 	for (size_t ival=0; ival < local_matrix.size(); ++ival){
 		size_t a = _tab_elem_csr_address[ielem][ival];

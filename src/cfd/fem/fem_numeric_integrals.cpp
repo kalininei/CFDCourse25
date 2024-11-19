@@ -597,3 +597,20 @@ std::vector<double> NumericElementIntegrals::dz_matrix_stab_supg(
 
 	return _quad->integrate(values);
 }
+
+std::vector<double> NumericElementIntegrals::custom_matrix(OperandFunc f) const{
+	std::vector<std::vector<double>> values;
+	for (size_t iquad = 0; iquad < _quad->size(); ++iquad){
+		Point quad_xi = _quad->points()[iquad];
+		std::vector<double> q;
+		OperandArg arg(_geom.get(), _basis.get(), quad_xi);
+
+		for (size_t irow = 0; irow < _basis->size(); ++irow){
+			for (size_t icol=0; icol < _basis->size(); ++icol){
+				q.push_back(f(irow, icol, &arg));
+			}
+		}
+		values.push_back(q);
+	}
+	return _quad->integrate(values);
+}

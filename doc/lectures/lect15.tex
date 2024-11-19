@@ -268,11 +268,11 @@ r_i = \frac{u_i - u_{ij}^p}{u_j - u_i}
 \left.\dfr{u}{c_{ij}}\right|_i = \frac{u_j - u^p_{ij}}{2|\vec c_{ij}|} \qquad \hence
 u_{ij}^p = u_j - 2 |\vec c_{ij}| \left. \dfr{u}{c_{ij}}\right|_i.
 \end{equation*}
-Производная по направлению $c_ij$ находится как проекция градиента:
+Производная по направлению $c_{ij}$ находится как проекция градиента:
 \begin{equation*}
-|\vec c_{ij}| \left.\dfr{u}{c_ij}\right|_i = \vec c_{ij} \cdot (\nabla u)_i.
+|\vec c_{ij}| \left.\dfr{u}{c_{ij}}\right|_i = \vec c_{ij} \cdot (\nabla u)_i.
 \end{equation*}
-Таким образом задача интерполяции сводится к задаче определения градиента функции
+Таким образом, задача интерполяции сводится к задаче определения градиента функции
 $u$ в узлах коллокации.
 
 \subsubsection{Определение градиентов в узлах коллокации. Метод наименьших квадратов}
@@ -363,7 +363,7 @@ $$
 \qquad f^H_{ij} = U_{ij} (u_i + u_j) / 2                 & \textrm{-- поток 2-го порядка \cref{eq:tvd_fhl_fvm}}\\
 \qquad \vec c_i, \vec c_j                                & \textrm{-- центры ячеек}\\
 \qquad \vec c^p = 2 \vec c_i - \vec c_j                  & \textrm{-- вспомогательная точка}\\
-\qquad u^p = \textrm{interpolate}(i, u, \vec c^p)        & \textrm{-- интерполируем $u$ в точке $\vec c^p$}\\
+\qquad u^p = \textrm{interpolate}(i, j, u, \vec c^p)     & \textrm{-- интерполируем $u$ в точке $\vec c^p$}\\
 \qquad r = \sfrac{(u_i - u^p)}{(u_j - u_i)}              & \textrm{-- отношение наклонов \cref{eq:tvd_ri_fvm}}\\
 \qquad F = \textrm{limiter}(r)                           & \textrm{-- ограничитель \cref{eq:tvd_limiter}}\\
 \qquad f_{ij} = f^L_{ij} + F (f^H_{ij} - f^L_{ij})       & \textrm{-- вычисление потока \cref{eq:tvd_f_fvm}}\\

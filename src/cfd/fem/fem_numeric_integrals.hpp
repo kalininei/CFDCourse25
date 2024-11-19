@@ -68,6 +68,8 @@ public:
 			const std::vector<double>& vx,
 			const std::vector<double>& vy={},
 			const std::vector<double>& vz={}) const override;
+
+	std::vector<double> custom_matrix(OperandFunc f) const override;
 private:
 	const Quadrature* _quad;
 	std::shared_ptr<const IElementGeometry> _geom;

@@ -34,6 +34,9 @@ public:
 	/// @brief cell volume
 	virtual double cell_volume(size_t icell) const = 0;
 
+	/// @brief linear cell size
+	virtual double cell_size(size_t icell) const = 0;
+
 	/// @brief get face unit normal
 	virtual Vector face_normal(size_t iface) const = 0;
 
@@ -104,6 +107,8 @@ public:
 	virtual ~IGrid1D() = default;
 
 	size_t dim() const override { return 1; }
+
+	double cell_size(size_t icell) const override { return cell_volume(icell); }
 };
 
 /**
@@ -114,6 +119,8 @@ public:
 	virtual ~IGrid2D() = default;
 
 	size_t dim() const override { return 2; }
+
+	double cell_size(size_t icell) const override { return std::sqrt(cell_volume(icell)); }
 };
 
 /**
@@ -124,6 +131,8 @@ public:
 	virtual ~IGrid3D() = default;
 
 	size_t dim() const override { return 3; }
+
+	double cell_size(size_t icell) const override { return std::cbrt(cell_volume(icell)); }
 };
 
 }

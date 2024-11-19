@@ -26,6 +26,7 @@ struct FemAssembler{
 	std::vector<size_t> tab_elem_basis(size_t icell) const;
 	std::vector<double> approximate(const IPointFunction& func) const;
 	std::vector<double> local_vector(size_t ielem, const std::vector<double>& v) const;
+	std::vector<Vector> local_vector(size_t ielem, const std::vector<double>& vx, const std::vector<double>& vy, const std::vector<double>& vz) const;
 
 	void add_to_global_vector(size_t ielem, const std::vector<double>& local_vector, std::vector<double>& global_vector) const;
 	void add_to_global_vector(double coef, size_t ielem, const std::vector<double>& local_vector, std::vector<double>& global_vector) const;

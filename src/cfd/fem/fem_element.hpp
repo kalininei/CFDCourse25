@@ -4,6 +4,7 @@
 #include "cfd/mat/densemat.hpp"
 #include "cfd/grid/i_grid.hpp"
 #include "cfd/geom/jacobi.hpp"
+#include <functional>
 
 namespace cfd{
 
@@ -167,7 +168,37 @@ public:
 			const std::vector<double>& vx,
 			const std::vector<double>& vy={},
 			const std::vector<double>& vz={}) const { _THROW_NOT_IMP_; }
+
+
+	// ⌠ 
+	// ⎮ fᵢⱼ dΩ
+	// ⌡
+	class OperandArg;
+	using OperandFunc = std::function<double(size_t, size_t, const OperandArg*)>;
+	virtual std::vector<double> custom_matrix(OperandFunc f) const { _THROW_NOT_IMP_; }
+
 };
+
+class IElementIntegrals::OperandArg{
+public:
+	OperandArg(const IElementGeometry* geom, const IElementBasis* basis, Point xi);
+	~OperandArg();
+
+	const IElementGeometry* geom;
+	const IElementBasis* basis;
+	Point xi;
+
+	double phi(size_t i) const;
+	Vector grad_phi(size_t i) const;
+	double modj() const;
+	const JacobiMatrix* jacobi() const;
+	double interpolate(const std::vector<double>& f) const;
+	Vector interpolate(const std::vector<Vector>& f) const;
+public:
+	struct Cache;
+	std::unique_ptr<Cache> _pcache;
+};
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // FemElement
