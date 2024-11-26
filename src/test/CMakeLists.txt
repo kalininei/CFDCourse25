@@ -10,6 +10,7 @@ set (SRC
 	transport_solve_test.cpp
 	transport_fvm_solve_test.cpp
 	convdiff_fem_test.cpp
+	cavity_simple_test.cpp
 	
 	utils/filesystem.cpp
 	utils/vecmat.cpp

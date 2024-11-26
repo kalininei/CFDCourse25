@@ -65,6 +65,8 @@ std::vector<size_t> PointSearcher<Dim>::nearest(const Point& p, size_t n) const{
 	return _pimpl->nearest(p, n);
 }
 
+namespace cfd{
 template struct PointSearcher<1>;
 template struct PointSearcher<2>;
 template struct PointSearcher<3>;
+}
