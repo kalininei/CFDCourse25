@@ -14,9 +14,9 @@ FetchContent_Declare(
 FetchContent_GetProperties(catch)
 if(NOT catch_POPULATED)
   FetchContent_Populate(catch)
-  add_subdirectory(${catch_SOURCE_DIR} ${catch_BINARY_DIR})
+  #add_subdirectory(${catch_SOURCE_DIR} ${catch_BINARY_DIR})
 endif()
-set(CATCH2_FRAMEWORK "Catch2::Catch2")
+#set(CATCH2_FRAMEWORK "Catch2::Catch2")
 
 # Boost search paths
 set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/../)

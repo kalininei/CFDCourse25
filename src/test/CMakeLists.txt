@@ -11,6 +11,9 @@ set (SRC
 	transport_fvm_solve_test.cpp
 	convdiff_fem_test.cpp
 	cavity_simple_test.cpp
+	obstacle_nonstat_simple_test.cpp
+	linear_simple_test.cpp
+	poiseuille_simple_test.cpp
 	
 	utils/filesystem.cpp
 	utils/vecmat.cpp
@@ -24,6 +27,8 @@ set (HEADERS
 )
 
 add_executable(cfd25_test ${SRC} ${HEADERS})
-target_link_libraries(cfd25_test PRIVATE ${CATCH2_FRAMEWORK} ${CFD_TARGET})
+#target_link_libraries(cfd25_test PRIVATE ${CATCH2_FRAMEWORK} ${CFD_TARGET})
+target_link_libraries(cfd25_test PRIVATE ${CFD_TARGET})
+target_include_directories(cfd25_test PRIVATE ${catch_SOURCE_DIR}/single_include/)
 target_include_directories(cfd25_test PRIVATE ${CMAKE_SOURCE_DIR}/src/test)
 target_compile_definitions(cfd25_test PUBLIC TEST_DIRECTORY="${CMAKE_SOURCE_DIR}/test_data/")
