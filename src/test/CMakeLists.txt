@@ -14,6 +14,7 @@ set (SRC
 	obstacle_nonstat_simple_test.cpp
 	linear_simple_test.cpp
 	poiseuille_simple_test.cpp
+	heat_transfer_piso_test.cpp
 	
 	utils/filesystem.cpp
 	utils/vecmat.cpp

@@ -1,0 +1,471 @@
+\section{Лекция 19 (7.12)}
+
+\subsection{Схема PISO}
+\subsubsection{Итерации PISO}
+\label{sec:piso}
+Рассмотрим модификацию схемы SIMPLE (п.~\ref{sec:simple-algo}), использующую несколько поправок скорости и давления.
+В качестве исходных уравнений используем полудискретизованную схему \cref{eq:ns2d_semi_u,eq:ns2d_semi_v,eq:ns2d_semi_div}.
+По аналогии с \cref{eq:ns2d_decomp} запишем искомое решение в виде пробной функции и корректоров
+\begin{equation}
+\label{eq:piso_decomp}
+\begin{array}{l}
+    \hat u = u^* + u' + u'' + u''' + \dots,\\
+    \hat v = v^* + v' + v'' + v''' + \dots,\\
+    \hat p = p + p' + p'' + p''' + \dots.
+\end{array}
+\end{equation}
+Дополнительно положим, что все поправки скорости выше первой бездивергентны:
+\begin{equation}
+\label{eq:piso_div_uprime2}
+\nabla\cdot \vec u'' = 0, \quad \nabla\cdot \vec u''' = 0, \quad \dots
+\end{equation}
+Тогда из требования бездивирегности финальной скорости $\hat u$ получим 
+\begin{equation}
+\label{eq:piso_div_uprime1}
+\nabla \cdot (\vec u^* + \vec u' + \vec u'' + \dots ) = 0 \hence \nabla \cdot \vec u' = - \nabla \cdot \vec u^*
+\end{equation}
+
+Для удобство записи введём обозначения для линеаризованных операторов, действующих на функции скорости
+\begin{equation}
+\label{eq:piso_s}
+\begin{aligned}
+&S^u(\hat u) = \hat u + \tau\dfr{u \hat u}{x} + \tau\dfr{v \hat u}{y} - \frac{\tau}{\Ren}\left(\dfrq{\hat u}{x} + \dfrq{\hat u}{y}\right),\\[5pt]
+&S^v(\hat v) = \hat v + \tau\dfr{u \hat v}{x} + \tau\dfr{v \hat v}{y} - \frac{\tau}{\Ren}\left(\dfrq{\hat v}{x} + \dfrq{\hat v}{y}\right).\\[5pt]
+\end{aligned}
+\end{equation}
+Разложим эти операторы как
+\begin{equation*}
+S^u(u) = A^u(u) + H^u(u),
+\end{equation*}
+где $A^u$ -- оператор, который в дискретизованной форме имеет диагоноальную структуру, а $H^u$ -- оператор, имеющий в дискретизованном виде нулевую диагональ.
+
+Далее подставим разложения \cref{eq:piso_decomp} в определяющие уравнение \cref{eq:ns2d_semi_u,eq:ns2d_semi_v}.
+Декомпозицию полученного уравнения проведём следующим образом (на примере уравнения для $u$):
+\begin{alignat}{6}
+& & A^u(u^*)    & + H^u(u^*)     &  =  & -\tau\ddfr{p}{x}    & + u     \label{eq:piso_eq_ustar}\\[5pt]
+&+& A^u(u')     &                &  =  & -\tau\ddfr{p'}{x}   &         \label{eq:piso_eq_uprime1}\\[5pt]
+&+& A^u(u'')    & + H^u(u')      &  =  & -\tau\ddfr{p''}{x}  &         \label{eq:piso_eq_uprime2}\\[5pt]
+&+& A^u(u''')   & + H^u(u'')     &  =  & -\tau\ddfr{p'''}{x} &         \label{eq:piso_eq_uprime3}\\[5pt]
+& &             &                &\dots&                     &\nonumber\\[10pt]
+&=& A^u(\hat u) & + H^u(\hat u)  &  =  & -\tau\ddfr{\hat p}{x} & + u \nonumber
+\end{alignat}
+Уравнение \cref{eq:piso_eq_ustar} аналогично уравнению \cref{eq:ns2d_ustar} метода SIMPLE.
+Оно используется для определения пробной скорости $u^*$.
+Уравнение для первой поправки скорости \cref{eq:piso_eq_uprime1} (аналог \cref{eq:ns2d_uprime})
+совместно с уравнением неразрывности \cref{eq:piso_div_uprime1} используется для формулировки задачи Пуассона для $p'$ \cref{eq:ns2d_pprime_diff}:
+\begin{equation}
+\label{eq:piso_eq_p_prime1}
+- \nabla \cdot \tensor d \nabla p' = - \frac1\tau \nabla \cdot \vec u^*.
+\end{equation}
+Здесь диагональный тензор $\tensor d$ равен
+\begin{equation*}
+\tensor d = \left(
+\begin{array}{cc}
+(A^u)^{\sminus 1} & 0                \\
+0                 & (A^v)^{\sminus 1}
+\end{array}
+\right)
+\end{equation*}
+Уравнения \cref{eq:piso_eq_uprime2,eq:piso_eq_uprime3} и последующие используются для формулировки задачи для $p'$, $p''$ и т.д.
+Рассмотрим его получение на примере \cref{eq:piso_eq_uprime2}.
+Во-первых, воспользуемя диагональностью (то есть легкообратимостью) оператора $A^u$ и выразим $u''$:
+\begin{equation*}
+u'' = -\tau (A^u)^{\sminus 1}\dfr{p''}{x} - (A^u)^{\sminus 1} H^u u'.
+\end{equation*}
+Аналогичное уравнение можно вывести и для вертикальной компоненты скорости:
+\begin{equation*}
+v'' = -\tau (A^v)^{\sminus 1}\dfr{p''}{y} - (A^v)^{\sminus 1} H^v v'.
+\end{equation*}
+Отсюда можно записать градиент от $\vec u''$:
+\begin{equation*}
+\nabla \cdot \vec u'' = -\tau \nabla \cdot \tensor d \nabla p'' - \nabla \cdot \tensor d \, \tensor H \vec u',
+\qquad
+\tensor H = \left(\begin{array}{cc}
+H^u & 0 \\
+0   & H^v
+\end{array}
+\right).
+\end{equation*}
+Этот градиент согласно \cref{eq:piso_div_uprime2} равен нулю.
+Похожих рассуждений будем придерживаться для вывода уравнений для $p'''$ и далее.
+Итого, уравнения для второй и последующих поправок далвения давления примут вид
+\begin{align}
+\label{eq:piso_eq_p_prime2}
+ - &\nabla \cdot \tensor d \nabla p'' = \frac1\tau \nabla \cdot \tensor d \, \tensor H \vec u', \\
+ - &\nabla \cdot \tensor d \nabla p''' = \frac1\tau \nabla \cdot \tensor d \, \tensor H \vec u'', \nonumber\\
+   &\dots \nonumber
+\end{align}
+
+Последовательность шагов при решении задачи на временном слое примет вид
+\begin{enumerate}
+\item Даны значение $\vec u$, $\vec v$, $p$ с прошлого слоя,
+\item Собираем сеточные операторы $\tensor A$, $\tensor H$ как диагональную и внедиагональную часть
+      линеаризованного оператора $\tensor S$ \cref{eq:piso_s}, и обратный к $\tensor A$ оператор $\tensor d$,
+\item Из уравнения \cref{eq:piso_eq_ustar} и его аналога для вертикальной компоненты скорости находим $u^*$, $v^*$,
+\item Из уравнения \cref{eq:piso_eq_p_prime1} находим первую поправку для давления $p'$,
+\item Из уравнения \cref{eq:piso_eq_uprime1}  и его аналога для вертикальной компоненты скорости находим $u'$, $v'$,
+\item Из уравнения \cref{eq:piso_eq_p_prime2} находим второую поправку для давления $p''$,
+\item Из уравнения \cref{eq:piso_eq_uprime2}  и его аналога для вертикальной компоненты скорости находим $u''$, $v''$,
+\item Повторяем шаги 6, 7 для каждой поправки скорости и давления выше первой,
+\item Записываем окончательное решение  на слое используя \cref{eq:piso_decomp}.
+\end{enumerate}
+
+Первые 5 шагов представленного алгоритма полностью соответствуют ранее рассмотренному методу SIMPLE.
+Шаги 6, 7 -- есть дополнительные уточняющие PISO итерации.
+В отличии от SIMPLE-итераций, эти итерации не требуют пересборки операторов и дополнительной инициализации решателей систем
+линейных уравнений, поэтому они более эффективны с точки зрения скорости расчёта.
+
+Отметим, что в представленной постановке (в отличии от схемы SIMPLE из п.~\ref{sec:simple-algo}) мы не использовали релаксацию, поэтому эту схему можно использовать
+для решения нестационарный задачи \cref{eq:ns2d_nonstat}, трактуя $\tau$ как шаг по реальному времени.
+
+\subsubsection{Граничные условия}
+TODO
+
+\subsubsection{Схема с внешними итарциями PIMPLE}
+TODO
+
+\subsection{Конвективный теплообмен}
+\subsubsection{Уравнение теплопроводности}
+
+Дополним нестационарную систему уравнений течения \cref{eq:ns2d_nonstat} уравнением теплообмена
+\begin{equation*}
+\rho c_p\left(\dfr{T}{t} + u\dfr{T}{x} + v\dfr{T}{y}\right) = \lambda\left(\dfrq{T}{x} + \dfrq{T}{y}\right).
+\end{equation*}
+Здесь $T$ -- температура течения, К; $\rho$ -- плотность жидкости, кг/м$^3$; $c_p$ -- теплоёмкость, Дж/кг/К;
+$\lambda$ -- теплопроводность, Вт/м/К.
+
+В безразмерном виде это уравнение примет вид
+\begin{equation}
+\label{eq:ns2d_nonstat_temperature}
+\dfr{T}{t} + u\dfr{T}{x} + v\dfr{T}{y} = \frac{1}{\Pen}\left(\dfrq{T}{x} + \dfrq{T}{y}\right).
+\end{equation}
+где безразмерная температура $T$ вычислена через размерную $T^{dim}$ как 
+$$
+T = \frac{T^{dim} - T^0}{\triangle T},
+$$
+а число Пекле $\Pen$ есть
+$$
+\Pen = \frac{U L}{a}, \quad a = \frac{\lambda}{\rho c_p}.
+$$
+
+\subsubsection{Дискретизация по времени}
+
+Пользуясь обозначениями из п. \ref{sec:simple-nonstat-algo}
+запишем неявную дискретизацию по времени уравнения \cref{eq:ns2d_nonstat_temperature} в виде
+
+\begin{equation}
+\label{eq:ns2d_nonstat_temperature_semi}
+\frac{\hat T - \check T}{\dt} + \hat u\dfr{\hat T}{x} + \hat v\dfr{\hat T}{y} = \frac{1}{\Pen}\left(\dfrq{\hat T}{x} + \dfrq{\hat T}{y}\right).
+\end{equation}
+
+Полученное уравнение не содержит значений $u, v$ с текущего итерационного слоя,
+и значит может быть решено один раз в конце шага по времени, когда сходимость уже достигнута.
+
+\subsubsection{Аппроксимация на разнесённой сетке}
+
+Пространственную аппроксимацию уравнения \cref{eq:ns2d_nonstat_temperature_semi}
+будем проводить на разнесённой сетке в центральных (``чёрных'') узлах сетки (\figref{fig:staggered_grid}).
+При этом конвективную производную будем приближать с помощью симметричной разности.
+Полученная конечная разность для узла $i+\tfrac12, j+\tfrac12$ примет вид
+\begin{align}
+\label{eq:ns2d_nonstat_temperature_scheme}
+\frac{1}{\dt}\hat T_{i+\tfrac12,j+\tfrac12}
+    & + \hat u_{i+\tfrac12, j+\tfrac12}\frac{\hat T_{i+\tfrac32, j+\tfrac12} - \hat T_{i-\tfrac12, j+\tfrac12}}{2h_x}\\
+    \nonumber
+    & + \hat v_{i+\tfrac12, j+\tfrac12}\frac{\hat T_{i+\tfrac12, j+\tfrac32} - \hat T_{i+\tfrac12, j-\tfrac12}}{2h_y}\\
+    \nonumber
+    & + \frac{1}{\Pen} \frac{-\hat T_{i+\tfrac32, j+\tfrac12} + 2\hat T_{i+\tfrac12,j+\tfrac12} - \hat T_{i-\tfrac12, j+\tfrac12}}{h_x^2} \\
+    \nonumber
+    & + \frac{1}{\Pen} \frac{-\hat T_{i+\tfrac12, j+\tfrac32} + 2\hat T_{i+\tfrac12,j+\tfrac12} - \hat T_{i+\tfrac12, j=\tfrac12}}{h_x^2} \\
+    \nonumber
+    & = \frac{1}{\dt}\check T_{i+\tfrac12,j+\tfrac12}.
+\end{align}
+
+Значения компонент скорости в центрах ячеек вычисляются с помощью ближайщей полусуммы
+\begin{align*}
+&\hat u_{i+\tfrac12, j+\tfrac12} \approx \frac{\hat u_{i, j+\tfrac12} + \hat u_{i+1, j+\tfrac12}}{2}, \\
+&\hat v_{i+\tfrac12, j+\tfrac12} \approx \frac{\hat v_{i+\tfrac12, j} + \hat v_{i+\tfrac12, j+1}}{2}.
+\end{align*}
+
+
+\subsubsection{Граничные условия}
+
+Учёт граничных условий производится за счёт вычисления значений в фиктивных узлах около границ.
+
+Пусть требуется учесть условие на левой стенке ($i=0$).
+Тогда соответствующий фиктивный узел будет иметь индекс $-\tfrac12, j$.
+Ниже приведём его выражения для трёх типов граничных условий.
+
+\subsubsubsection{Условия первого рода}
+Пусть
+\begin{equation}
+\label{eq:ns2d_temperature_bc1}
+\left. T\right|_{left} = T^{\Gamma}
+\end{equation}
+Тогда
+$$
+\frac{T_{-\tfrac12, j+\tfrac12} + T_{\tfrac12, j+\tfrac12}}{2} = T^{\Gamma}.
+$$
+Отсюда 
+$$
+T_{-\tfrac12, j+\tfrac12} = -T_{\tfrac12, j+\tfrac12} + 2 T^{\Gamma}.
+$$
+Таким образом, если в матрицу $A^T$ левой части выражения \cref{eq:ns2d_nonstat_temperature_scheme}
+в фиктивную колонку $k\left[-\tfrac12, j+\tfrac12\right]$ требуется добавить
+какое-то значение $a$, это равносильно добавлению этого выражнеия с обратным знаком в диагональ
+и удвоенного выражения, умноженного на граничное значение, в правую часть $b^T$:
+\begin{align}
+\nonumber
+&k_0 = k\left[\tfrac12, j + \tfrac12\right], \quad k_1 = k\left[-\tfrac12, j + \tfrac12\right], \\
+\label{eq:ns2d_temperature_bc1_scheme}
+&A^T_{k_0, k_1} {{+}{=}} a \hence
+     A^T_{k_0, k_0} \minuseq a, \quad b^T_{k_0} \minuseq 2 a T^\Gamma.
+\end{align}
+
+
+\subsubsubsection{Условия второго рода}
+Если на левой границе задано условие второго рода
+\begin{equation}
+\label{eq:ns2d_temperature_bc2}
+\left.\dfr{T}{n}\right|_{left} = -\left. \dfr{T}{x} \right|_{left} = q
+\end{equation}
+То вычисление фиктивного узла производится из конечной разности вида
+$$
+\frac{T_{-\tfrac12, j+\tfrac12} - T_{\tfrac12, j+\tfrac12}}{h_x} = q.
+$$
+Отсюда 
+$$
+T_{-\tfrac12, j+\tfrac12} = T_{\tfrac12, j+\tfrac12} + h_x q
+$$
+Тогда
+\begin{align}
+\label{eq:ns2d_temperature_bc2_scheme}
+&A^T_{k_0, k_1} {{+}{=}} a \hence
+     A^T_{k_0, k_0} \pluseq a, \quad b^T_{k_0} \minuseq h_x q
+\end{align}
+
+\subsubsubsection{Условия третьего рода}
+Пусть на левой границе задано условие второго рода
+\begin{equation}
+\label{eq:ns2d_temperature_bc3}
+\left.\dfr{T}{n}\right|_{left} = -\left. \dfr{T}{x} \right|_{left} = \alpha T + \beta
+\end{equation}
+
+Расписывая производную и вычисляя значение температуры на стенке через полусумму, получим
+$$
+\frac{T_{-\tfrac12, j+\tfrac12} - T_{\tfrac12, j+\tfrac12}}{h_x} = \alpha \frac{T_{-\tfrac12, j+\tfrac12} + T_{\tfrac12, j+\tfrac12}}{2} + \beta.
+$$
+Отсюда выразим значение в фиктивном узле
+$$
+T_{-\tfrac12, j+\tfrac12} = \frac{2 + \alpha h_x}{2-\alpha h_x} T_{\tfrac12, j+\tfrac12} + \frac{2\beta h_x}{2 - \alpha h_x}
+$$
+Тогда
+\begin{align}
+\label{eq:ns2d_temperature_bc3_scheme}
+&A^T_{k_0, k_1} {{+}{=}} a \hence
+     A^T_{k_0, k_0} \pluseq \frac{2 + \alpha h_x}{2 - \alpha h_x} a, \quad b^T_{k_0} \minuseq \frac{2 \beta h_x}{2 - \alpha h_x} a.
+\end{align}
+
+\subsubsubsection{Универсальность условий третьего рода}
+Условие третьего рода \cref{eq:ns2d_temperature_bc3} можно использовать для моделирования условий первого и второго рода.
+Так, условия второго рода \cref{eq:ns2d_temperature_bc2} получаются, если положить $\alpha = 0$, $\beta = q$.
+А условия первого \cref{eq:ns2d_temperature_bc1}, -- если $\alpha = \eps^{-1}, \beta = -\eps^{-1}T^\Gamma$, где $\eps$ -- малое положительное число.
+
+Если подставить эти выражения в формулу \cref{eq:ns2d_temperature_bc3_scheme}, то можно убедится,
+что они дадут выражения \cref{eq:ns2d_temperature_bc2_scheme} и \cref{eq:ns2d_temperature_bc1_scheme} (в пределе при $\eps \to 0$)
+соответственно.
+
+\subsubsection{Коэффициент теплообмена}
+На границах, где заданы условия первого рода \cref{eq:ns2d_temperature_bc1}
+можно вычислить тепловой поток, тем самым
+определив, сколько тепловой энергии требуется для
+поддержания этой постоянной температуры.
+
+Безразмерный интегральный коэффициент теплообмена (интегральное число Нуссельта) определяется как
+\begin{equation}
+\label{eq:integral_nu}
+\Nun = \arint{\dfr{T}{n}}{\gamma}{s}.
+\end{equation}
+
+Для получения размерной мощности из этого безразмерного коэффициента (измеряемой в Ваттах),
+необходимо умножить его на $\lambda \triangle T L$.
+
+Вычисление интегрального числа Нуссельта из определения \cref{eq:integral_nu} происходит по той
+же схеме, что и вычисление коэффициентов сил \cref{eq:ns2d_gamma_quadrature}.
+При этом нормальная производная на границе $\dsfr{T}{n}$ вычисляется в виде
+\begin{equation}
+\label{eq:dtdn_scheme}
+(x,y)\in\gamma_i: \quad \dfr{T}{n} \approx \frac{T^\Gamma - T_k}{h/2},
+\end{equation}
+где $\gamma_i$ -- отрезок границы, $k$ -- индекс ячейки, прилегающей к этому отрезку,
+$h$ -- шаг сетки, поперёк границы ($h_x$ для вертикальных границ и $h_y$ -- для горизонтальных).
+
+
+\subsection{Задание для самостоятельной работы}
+\clisting{open}{"test/heat_transfer_piso_test.cpp"}
+В тесте \cvar{[heat-transfer-piso]} файла \ename{heat_transfer_piso_test.cpp} представлено решение нестационарной задачи обтекания
+нагреваемого тела, расчитанного по схеме PISO (п.~\ref{sec:piso}).
+На основе этого теста нужно решить задачу обтекания двух тел: одно расположено
+в прямоугольнике
+$$
+\gamma_1: \begin{cases}
+2.0 \leq x \leq 2.5, \\
+-0.7 \leq y \leq 0.3,
+\end{cases}
+$$
+второе --
+$$
+\gamma_2: \begin{cases}
+4 \leq x \leq 4.5, \\
+-0.3 \leq y \leq 0.7.
+\end{cases}
+$$
+Использовать условия для температуры:
+\begin{align*}
+(x, y) \in \Gamma_{in}: \quad &T= 0, \\
+(x, y) \in \gamma_1: \quad &T=0.5,\\
+(x, y) \in \gamma_2: \quad &T=1.0.
+\end{align*}
+Область расчёта $[0,15]\times[-2,2]$:
+\begin{cppcode}
+RegularGrid2D grid(0, 15, -2, 2, 15*n_unit, 4*n_unit);
+\end{cppcode}
+Остальные граничные условия использовать те же, что и
+в рассмотренной в п. \ref{sec:prob-obstacle-temp} задаче.
+Параметры задачи:
+$\Ren = 100$, $\Pen = 100$, $\dt = 0.05$, $t_{end} = 200$, $n=10$.
+
+Необходимо:
+\begin{itemize}
+\item Нарисовать анимированную картину течения: скорость, давление и температуру
+\item Представить графики изменения коэффициентов сопротивления и теплообмена во времени для обоих обтекаемых тел
+\item Увеличить количество PISO итераций (например, до \cvar{n_piso=3}) и сравнить полученные коэффицинеты сопротивления с случаем одной итерации.
+\end{itemize}
+
+\paragraph{Задание сетки с неактивными ячейками}
+\clisting{to-start}{}
+\clisting{pass}{"TEST_CASE"}
+Обтекаемые препятствия следует задавать
+при определении сетки. В рассмотренном примере из предыдущего пункта
+это делалось в строке
+\clisting{line}{"deactivate_cells"}
+В настоящей задачи нужно эту функцию вызвать два раза, указав там по очереди обе нужные области.
+
+\paragraph{Задание граничных условий на температуру}
+Поскольку в задаче граничные условия на обтекаемых
+телах отличаются по своему значению, то следует
+модифицировать алгоритм их задания.
+Граничные условия на температуру задаются в функции \cvar{compute_temperature}
+в строке
+\clisting{to-start}{}
+\clisting{pass}{"HeatTransferPisoWorker::compute_temperature()"}
+\clisting{lines-range}{"internal boundary", "rhs"}
+
+Согласно форме
+\cref{eq:ns2d_temperature_bc1_scheme}
+изменения в левой части не зависит от величины граничной температуры,
+а в провой -- пропорционально ей.
+Таким образом, для первого тела (где $T^\Gamma = 0.5$) добавка в правую часть будет иметь вид
+\begin{minted}[linenos=false]{c++}
+rhs[row_index] -= 2*value*0.5,
+\end{minted}
+а для второго -- останется такой же, как и раньше.
+
+При этом нужно уметь отличать грани, принадлежащие
+первому телу от граней, принадлежащих второму.
+Для этого в классе \cvar{HeatTransferPisoWorker} можно
+объявить функцию, которая определяет ближайшую к ячейке границу.
+Саму функцию можно реализовать просто используя координаты
+центра ячейки \cvar{_grid.cell_center(icell)}. Например:
+\begin{minted}[linenos=false]{c++}
+// => 1 если ячейка icell близка к первому обтекаемому телу и 2 - если ко второму
+int HeatTransferPisoWorker::gamma_closest_to_cell(size_t icell){
+	double x = _grid.cell_center(icell).x();
+	if (x < 3.25) {  // центр между первым и вторым телами
+		return 1;
+	} else {
+		return 2;
+	}
+}
+\end{minted}
+Тогда можно написать
+\begin{minted}[linenos=false]{c++}
+double t_gamma = (gamma_closest_to_cell(row_index) == 1) ? 0.5 : 1.0;
+rhs[row_index] -= 2*t_gamme*value;
+\end{minted}
+Здесь запись \cvar{double a = (cond) ? 0.5 : 1.0;} есть сокращение от
+
+\begin{minted}[linenos=false]{c++}
+double a;
+if (cond){
+	a = 0.5;
+} else {
+	a = 1.0
+}
+\end{minted}
+
+\paragraph{Вычисление коэффициентов}
+Во-первых следует модифицировать структуру, хранящую коэффициенты,
+сделав там отдельные записи для каждого тела:
+\begin{minted}[linenos=false]{c++}
+struct Coefficients{
+	double cpx1, cpx2;
+	double cfx1, cfx2;
+	double cx1, cx2;
+	double nu1, nu2;
+};
+\end{minted}
+Во-вторых, в функции сохранения этих коэффициентов в файл
+в функции \cvar{HeatTransferPisoWorker::save_current_fields}
+\begin{minted}[linenos=false]{c++}
+cx_writer << time << " ";
+cx_writer << coefs.cx1 << " " << coefs.nu1 << " ";
+cx_writer << coefs.cx2 << " " << coefs.nu2 << std::endl;
+\end{minted}
+Соответственно можно поправить легенду в функции \cvar{initialize_saver()}.
+
+Сами коэффициенты следует вычислять в функции \cvar{coefficients()}.
+Там нужно завести аггрегаторы на оба тела:
+\begin{minted}[linenos=false]{c++}
+double sum_cpx1 = 0;
+double sum_cfx1 = 0;
+double sum_nu1  = 0;
+double sum_cpx2 = 0;
+double sum_cfx2 = 0;
+double sum_nu2  = 0;
+\end{minted}
+
+И далее заполнять их в зависимости от близости ячейки.
+Так же следует учесть значение граничной температуры
+при вычислении $\dsfr{T}{n}$ по формуле \cref{eq:dtdn_scheme}
+
+Например, для вертикальных граней
+после определения ячейки \cvar{left_cell}:
+\begin{minted}[linenos=false]{c++}
+int gamma_i = gamma_closest_to_cell(left_cell);
+double t_gamma = (gamma_i == 1) ? 0.5 : 1.0;
+\end{minted}
+далее учесть при вычислении \cvar{dtdn} (два раза)
+\begin{minted}[linenos=false]{c++}
+dtdn = (t_gamma - _t[left_cell]) / (_hx/2.0);
+\end{minted}
+а также при выборе агрегатора
+\begin{minted}[linenos=false]{c++}
+if (gamma_i == 1){
+	sum_cpx1 += pnx * _hy;
+	sum_nu1 += dtdn * _hy;
+} else {
+	sum_cpx2 += pnx * _hy;
+	sum_nu2 += dtdn * _hy;
+}
+\end{minted}
+
+Аналогичную процедуру следует проделать и для горизонтальных граней.
+
+В конце нужно правильным образом заполнить все поля
+переменной \cvar{coef}.
+\begin{minted}[linenos=false]{c++}
+	coefs.cpx1 = 2.0*sum_cpx1;
+	coefs.cpx2 = 2.0*sum_cpx2;
+	...
+\end{minted}

@@ -333,7 +333,7 @@ $\left(i, j+\tfrac12\right)$:
 Схему \eqref{eq:ns2d_ustar_discr} можно записать в виде системы линейных уравнений вида
 \begin{equation}
     \label{eq:ns2d_ustar_slae}
-    A^u u^* = b^{u}.
+    S^u u^* = b^{u}.
 \end{equation}
 Сеточная матрица $A^u$ будет иметь $(n_x+1)n_y$ строк.
 Для строки, соответствующей $\left(i,j+\tfrac12\right)$ узлу ненулевыми будут столбцы,
@@ -376,34 +376,34 @@ $\left(i, j+\tfrac12\right)$:
 Окончательно запишем все пять ненулевых вхождений в строку матрицы:
 \begin{align}
     \label{eq:ns2d_au}
-    A^u\left[
+    S^u\left[
         k\left(i,j+\tfrac12\right),
         k\left(i,j+\tfrac12\right)\right]
         &= 1 + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)
         \quad - \;\text{основная диагональ}, \\[10pt]
     \nonumber
-    A^u\left[
+    S^u\left[
         k\left(i,j+\tfrac12\right),
         k\left(i+1,j+\tfrac12\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_x^2}
            +\frac{\tau}{4h_x}\left(u_{i,j+\tfrac12}+u_{i+1,j+\tfrac12}\right)
         \quad - \;\text{первая верхняя диагональ}, \\[10pt]
     \nonumber
-    A^u\left[
+    S^u\left[
         k\left(i,j+\tfrac12\right),
         k\left(i-1,j+\tfrac12\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_x^2}
            -\frac{\tau}{4h_x}\left(u_{i,j+\tfrac12}+u_{i-1,j+\tfrac12}\right)
         \quad - \;\text{первая нижняя диагональ}, \\[10pt]
     \nonumber
-    A^u\left[
+    S^u\left[
         k\left(i,j+\tfrac12\right),
         k\left(i,j+\tfrac32\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_y^2}
            +\frac{\tau}{4h_y}\left(v_{i+\tfrac12,j+1}+v_{i-\tfrac12,j+1}\right)
         \quad - \;\text{вторая верхняя диагональ}, \\[10pt]
     \nonumber
-    A^u\left[
+    S^u\left[
         k\left(i,j+\tfrac12\right),
         k\left(i,j-\tfrac12\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_y^2}
@@ -416,39 +416,39 @@ $\left(i, j+\tfrac12\right)$:
 дают систему уравнений
 \begin{equation}
     \label{eq:ns2d_vstar_slae}
-    A^v v^* = b^{v},
+    S^v v^* = b^{v},
 \end{equation}
 элементы пятидиагональной матрицы которой имеют вид
 \begin{align}
     \label{eq:ns2d_av}
-    A^v\left[
+    S^v\left[
         k\left(i+\tfrac12,j\right),
         k\left(i+\tfrac12,j\right)\right]
         &= 1 + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)
         \quad - \;\text{основная диагональ}, \\[10pt]
     \nonumber
-    A^v\left[
+    S^v\left[
         k\left(i+\tfrac12,j\right),
         k\left(i+\tfrac32,j\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_x^2}
            +\frac{\tau}{4h_x}\left(u_{i+1,j+\tfrac12}+u_{i+1,j-\tfrac12}\right)
         \quad - \;\text{первая верхняя диагональ}, \\[10pt]
     \nonumber
-    A^v\left[
+    S^v\left[
         k\left(i+\tfrac12,j\right),
         k\left(i-\tfrac12,j\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_x^2}
            -\frac{\tau}{4h_x}\left(u_{i,j+\tfrac12}+u_{i,j-\tfrac12}\right)
         \quad - \;\text{первая нижняя диагональ}, \\[10pt]
     \nonumber
-    A^v\left[
+    S^v\left[
         k\left(i+\tfrac12,j\right),
         k\left(i+\tfrac12,j+1\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_y^2}
            +\frac{\tau}{4h_y}\left(v_{i+\tfrac12,j}+v_{i+\tfrac12,j+1}\right)
         \quad - \;\text{вторая верхняя диагональ}, \\[10pt]
     \nonumber
-    A^v\left[
+    S^v\left[
         k\left(i+\tfrac12,j\right),
         k\left(i+\tfrac12,j-1\right)\right]
         &= -\frac{\tau}{\Ren}\frac{1}{h_y^2}
@@ -526,32 +526,32 @@ $\left(i, j+\tfrac12\right)$:
 Пространственная аппроксимация выражения \eqref{eq:ns2d_uprime}
 приводит к системе уравнений
 \begin{equation*}
-    A^u u' = -\tau\dfr{p'}{x}
+    S^u u' = -\tau\dfr{p'}{x}
 \end{equation*}
-где матрица $A^u$ -- та же самая матрица, которая использовалась
+где матрица $S^u$ -- та же самая матрица, которая использовалась
 при аппроксимации уравнения движения \eqref{eq:ns2d_ustar_discr}.
 
 Сравнивая предыдущее выражение с \eqref{eq:ns2d_uprime_approx}
 сделаем вывод, что $d^u$ должна быть такой, чтобы
 \begin{equation*}
-    d^u \dfr{p'}{x} \approx \left(A^u\right)^{-1} \dfr{p'}{x}.
+    d^u \dfr{p'}{x} \approx \left(S^u\right)^{\sminus 1} \dfr{p'}{x}.
 \end{equation*}
 То есть поэлементное умножение сеточного вектора ${d^u}$ 
 на другой вектор
-должно действовать похоже на умножение обратной к $A^u$ матрицы на этот же самый вектор.
+должно действовать похоже на умножение обратной к $S^u$ матрицы на этот же самый вектор.
 
-Исходя из свойств матрицы $A^u$ \eqref{eq:ns2d_au} можно
+Исходя из свойств матрицы $S^u$ \eqref{eq:ns2d_au} можно
 положить 
 \begin{equation}
     \label{eq:ns2d_du}
-    d^u = \left({\rm diag}\left(A^u\right)\right)^{-1} = 
-        \left(1 + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)\right)^{-1}
+    d^u = \left({\rm diag}\left(S^u\right)\right)^{\sminus 1} = 
+        \left(1 + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)\right)^{\sminus 1}
 \end{equation}
 и аналогично из \eqref{eq:ns2d_av}
 \begin{equation}
     \label{eq:ns2d_dv}
-    d^v = \left({\rm diag}\left(A^v\right) \right)^{-1}= 
-        \left(1 + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)\right)^{-1}.
+    d^v = \left({\rm diag}\left(S^v\right) \right)^{\sminus 1}= 
+        \left(1 + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)\right)^{\sminus 1}.
 \end{equation}
 Равентство коэффициентов $d^u = d^v$ -- следствие использования симметричной
 аппроксимации конвективного слагаемого в уравнениях движения.

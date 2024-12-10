@@ -73,14 +73,14 @@
     \label{eq:ns2d_nonstat_duv}
     \begin{array}{l}
     \displaystyle
-    d^u = \left({\rm diag}\left(A^u\right)\right)^{-1} = 
+    d^u = \left({\rm diag}\left(S^u\right)\right)^{-1} = 
         \left(1 + \frac\tau\dt + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)\right)^{-1} \\[10pt]
     \displaystyle
-    d^v = \left({\rm diag}\left(A^v\right) \right)^{-1}= 
+    d^v = \left({\rm diag}\left(S^v\right) \right)^{-1}= 
         \left(1 + \frac\tau\dt + \frac{2\tau}{\Ren}\left(\frac{1}{h_x^2} + \frac{1}{h_y^2}\right)\right)^{-1}.
     \end{array}
 \end{equation}
-Здесь $A^u$, $A^v$ -- матрицы левых частей выражений \eqref{eq:ns2d_nonstat_uvstar}.
+Здесь $S^u$, $S^v$ -- матрицы левых частей выражений \eqref{eq:ns2d_nonstat_uvstar}.
 
 Схема расчёта на временн\'{о}м слое остаётся аналогичной стационарному случаю,
 с той разницей, что первая итерация использует значение расчётных полей
