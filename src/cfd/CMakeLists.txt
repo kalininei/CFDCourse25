@@ -26,6 +26,7 @@ set (SRC
 	debug/tictoc.cpp
 
 	fvm/fvm_assembler.cpp
+        fvm/fvm_dpdn_boundary.cpp
 
 	fem/fem_assembler.cpp
 	fem/fem_element.cpp
@@ -75,6 +76,7 @@ set (HEADERS
 	debug/tictoc.hpp
 
 	fvm/fvm_assembler.cpp
+        fvm/fvm_dpdn_boundary.hpp
 
 
 	fem/fem_assembler.hpp

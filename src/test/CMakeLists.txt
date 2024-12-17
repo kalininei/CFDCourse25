@@ -12,6 +12,7 @@ set (SRC
 	convdiff_fem_test.cpp
 	cavity_simple_test.cpp
 	obstacle_nonstat_simple_test.cpp
+	cylinder_fvm_pimple_test.cpp
 	linear_simple_test.cpp
 	poiseuille_simple_test.cpp
 	heat_transfer_piso_test.cpp

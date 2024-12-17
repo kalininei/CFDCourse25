@@ -131,10 +131,60 @@ std::array<CsrMatrix, 3> assemble_fvm_cell_gradient(const IGrid& grid, const Fvm
 
 }
 
-FvmCellGradient::FvmCellGradient(const IGrid& grid, const FvmExtendedCollocations& colloc)
-	: _data(assemble_fvm_cell_gradient(grid, colloc)){}
+LeastSquaresFvmCellGradient::LeastSquaresFvmCellGradient(const IGrid& grid, const FvmExtendedCollocations& colloc){
+	_data = assemble_fvm_cell_gradient(grid, colloc);
+}
 
-std::vector<Vector> FvmCellGradient::compute(const std::vector<double>& u) const{
+GaussLinearFvmCellGradient::GaussLinearFvmCellGradient(const IGrid& grid, const FvmExtendedCollocations& colloc){
+	LodMatrix grad_x(grid.n_cells());
+	LodMatrix grad_y(grid.n_cells());
+	LodMatrix grad_z(grid.n_cells());
+
+	for (size_t iface=0; iface < grid.n_faces(); ++iface){
+		auto icollocs = colloc.tab_face_colloc(iface);
+		Vector n = grid.face_area(iface) * grid.face_normal(iface);
+		// ---- internal face
+		if (icollocs[0] < grid.n_cells() && icollocs[1] < grid.n_cells()){
+			const auto& icells = icollocs;
+			double vol1 = grid.cell_volume(icells[0]);
+			double vol2 = grid.cell_volume(icells[1]);
+			// left cell
+			grad_x.add_value(icells[0], icells[0], n.x()*0.5/vol1);
+			grad_y.add_value(icells[0], icells[0], n.y()*0.5/vol1);
+			grad_z.add_value(icells[0], icells[0], n.z()*0.5/vol1);
+			grad_x.add_value(icells[0], icells[1], n.x()*0.5/vol1);
+			grad_y.add_value(icells[0], icells[1], n.y()*0.5/vol1);
+			grad_z.add_value(icells[0], icells[1], n.z()*0.5/vol1);
+			// right cell
+			grad_x.add_value(icells[1], icells[0], -n.x()*0.5/vol2);
+			grad_y.add_value(icells[1], icells[0], -n.y()*0.5/vol2);
+			grad_z.add_value(icells[1], icells[0], -n.z()*0.5/vol2);
+			grad_x.add_value(icells[1], icells[1], -n.x()*0.5/vol2);
+			grad_y.add_value(icells[1], icells[1], -n.y()*0.5/vol2);
+			grad_z.add_value(icells[1], icells[1], -n.z()*0.5/vol2);
+		}
+		// boundary face (no right cell)
+		else if (icollocs[1] >= grid.n_cells()){
+			double vol1 = grid.cell_volume(icollocs[0]);
+			grad_x.add_value(icollocs[0], icollocs[1], n.x()/vol1);
+			grad_y.add_value(icollocs[0], icollocs[1], n.y()/vol1);
+			grad_z.add_value(icollocs[0], icollocs[1], n.z()/vol1);
+		// boundary face (no left cell)
+		} else {
+			double vol2 = grid.cell_volume(icollocs[1]);
+			grad_x.add_value(icollocs[1], icollocs[0], -n.x()/vol2);
+			grad_y.add_value(icollocs[1], icollocs[0], -n.y()/vol2);
+			grad_z.add_value(icollocs[1], icollocs[0], -n.z()/vol2);
+		}
+	}
+	_data[0] = grad_x.to_csr();
+	_data[1] = grad_y.to_csr();
+	if (grid.dim() > 2){
+		_data[2] = grad_z.to_csr();
+	}
+}
+
+std::vector<Vector> IFvmCellGradient::compute(const std::vector<double>& u) const{
 	std::vector<double> x = _data[0].mult_vec(u);
 	std::vector<double> y = _data[1].mult_vec(u);
 

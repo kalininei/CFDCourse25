@@ -41,13 +41,23 @@ private:
 // FvmCellGradient
 ///////////////////////////////////////////////////////////////////////////////
 
-struct FvmCellGradient{
-	FvmCellGradient(const IGrid& grid, const FvmExtendedCollocations& colloc);
+struct IFvmCellGradient{
+	virtual ~IFvmCellGradient() = default;
 
 	std::vector<Vector> compute(const std::vector<double>& u) const;
-private:
+protected:
 	std::array<CsrMatrix, 3> _data;
 };
+
+struct LeastSquaresFvmCellGradient: public IFvmCellGradient{
+	LeastSquaresFvmCellGradient(const IGrid& grid, const FvmExtendedCollocations& colloc);
+};
+
+struct GaussLinearFvmCellGradient: public IFvmCellGradient{
+	GaussLinearFvmCellGradient(const IGrid& grid, const FvmExtendedCollocations& colloc);
+};
+
+using FvmCellGradient = LeastSquaresFvmCellGradient;
 
 ///////////////////////////////////////////////////////////////////////////////
 // DfDn on faces
