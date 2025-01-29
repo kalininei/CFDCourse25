@@ -3,12 +3,12 @@
 #include "cfd/debug/saver.hpp"
 #include "cfd/debug/printer.hpp"
 
+
 TEST_CASE("Ping", "[ping]"){
 	cfd::dbg::ping_saver_cpp();
 	cfd::dbg::ping_printer_cpp();
 	CHECK(cfd::ping() == 1);
 }
-
 
 int main(int argc, char* argv[]){
 	int result = Catch::Session().run(argc, argv);

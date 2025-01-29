@@ -1,0 +1,99 @@
+\section{Лекция 23 (25.01)}
+
+\subsection{Вычисление матрицы Якоби через базисные функции}
+TODO
+
+\subsection{Применение квадратурных формул для вычисления элементных интегралов}
+TODO
+\subsubsection{Диагонализация матрицы масс}
+TODO
+
+\subsection{Матричный алгоритм построения конечных элементов высокого порядка}
+TODO
+
+\subsection{Неполные конечные элементы}
+TODO
+
+\subsection{Задание для самостоятельной работы}
+Провести сравнительный анализ на порядок аппроксимации решения двумерного
+уравнения Пуассона с граничными условиями первого рода
+следующих конечноэлементных схем
+\begin{enumerate}
+\item
+Линейные треугольные элементы (\figref{fig:triangle_basis_points}а)
+\item
+Квадратричные треугольные элементы (\figref{fig:triangle_basis_points}б)
+\item
+Кубические треугольные элементы (\figref{fig:triangle_basis_points}в)
+\item
+Неполные 9-узловые кубические треугольные элементы (\figref{fig:triangle_basis_points}г). В качестве базисных функций использовать полиномы,
+составленные из 9 слагаемых вида
+$$
+P(\xi, \eta) \in
+\rm{span}\left\{1, \xi, \eta, \xcancel{\color{gray} \xi \eta}, \xi^2, \eta^2, \xi^2\eta, \xi\eta^2, \xi^3, \eta^3 \right\}
+$$
+\end{enumerate}
+(из 10 слагаемых, используемых для построения кубического базиса в треугольнике,
+из соображений симметрии было убрано слагаемое $\xi\eta$).
+
+Построить кривые сходимости для всех четырёх случаев на едином графике.
+Для кубических треугольных элементов найти оптимальную квадтратурную функцию.
+
+Задание в целом аналогично заданию~\ref{sec:fem_programming_problem}.
+
+Принципы программирования конечноэлементного решателя описаны в п.~\ref{sec:fem_programming}.
+В настоящем задании была добавлена концепция численного интегрирования конечного элемента,
+которая заключена в реализации \cvar{NumericElementIntegrals} интерфейса \cvar{IElementIntegrals}.
+
+Ниже рассмотрено создание кубического треугольного элемента, где для
+вычисления элементых интегралов используются гауссовые квадратуры, точные для полиномов 4-ой степени (\ename{quadrature_triangle_gauss4}).
+\clisting{open}{"test/poisson_fem_solve_test.cpp"}
+\clisting{pass}{"TestPoissonCubicWorker::build_fem"}
+\clisting{lines-range}{"geom", "elem"}
+Для понижения точности до третьей, следует использовать функцию
+\ename{quadrature_triangle_gauss3} и т.д.
+
+Все необходимые тесты находятся в файле \ename{poisson_fem_solve_test.cpp}.
+Для {\bf линейных треугольных} элементов использовать тест \ename{[poisson2-fem-tri]}.
+
+Для {\bf квадратичных треугольных} элементов -- \ename{[poisson2-fem-quadratic]}.
+
+Для {\bf кубических треугольных} элементов -- \ename{[poisson2-fem-cubic]}.
+
+Для {\bf неполных кубических треугольных} элементов систему локальных базисных функций нужно
+вычислить самостоятельно используя алгоритм из п.\ref{sec:triangle_bases}.
+На основе полученных соотношений нужно создать класс
+\begin{cppcode}
+class TriangleCubicBasis_NoXiEta: public IElementBasis{
+public:
+	size_t size() const override;
+	std::vector<Point> parametric_reference_points() const override;
+	std::vector<BasisType> basis_types() const override;
+	std::vector<double> value(Point xi) const override;
+	std::vector<Vector> grad(Point xi) const override;
+};
+\end{cppcode}
+и реализовать все необходимые функции:
+\begin{itemize}
+\item \cvar{size} -- общее количество базисных функций. Здесь будет девять,
+\item \cvar{parametric_reference_points} -- параметрические координаты девяти узловых точек (соблюдая порядок локальной индексации),
+\item \cvar{basis_types} -- типы базисных функций. Здесь все базисы узловые (\cvar{BasisType::Nodal}),
+\item \cvar{value} -- значение девяти базисных функций в заданной параметрической точке. Здесь нужно подставить полученные при вычислении базисы,
+\item \cvar{grad} -- градиенты вычисленных базисных функций. Для заполнения нужно подсчитать аналитические производные по $\xi$ и $\eta$ вычислиенных базисов.
+\end{itemize}
+Реализовать этот класс можно взяв в качестве основы уже реализованный класс \cvar{TriangleCubicBasis} из файла \ename{cfd24/fem/elem2d/traingle_cubic.hpp}. Реализовывать следует в том же файле.
+После того, как базис будет реализован, его нужно использовать в тесте \ename{poisson2-fem-cubic}:
+\begin{cppcode}
+auto basis = std::make_shared<TriangleCubicBasis_NoXiEta>();
+\end{cppcode}
+Следует убрать последний базис из таблицы связности
+\begin{cppcode}
+tab_elem_basis.push_back({
+	bas0, bas1, bas2,
+	bas3, bas4, bas5, bas6, bas7, bas8
+});
+\end{cppcode}
+и сократить общее количество базисных функций
+\begin{cppcode}
+size_t n_bases = grid.n_points() + 2*grid.n_faces();
+\end{cppcode}

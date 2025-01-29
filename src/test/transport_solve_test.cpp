@@ -246,3 +246,40 @@ TEST_CASE("Transport 1D solver, Crank-Nicolson", "[transport1-cn]"){
 	std::cout << 1.0/tau << " " << norm << std::endl;
 	CHECK(norm == Approx(0.0937748).margin(1e-5));
 }
+
+TEST_CASE("b", "[b]"){
+	size_t n = 50;
+	size_t maxit = 1000;
+	auto exact = [](double x){ return 1*sin(2*M_PI*x) + 0.2 * sin(20*M_PI*x); };
+	auto rhs = [](double x){ return 4*M_PI*M_PI*sin(2*M_PI*x) + 0.2 * 400*M_PI*M_PI*sin(20*M_PI*x); };
+
+	std::vector<double> x(n + 1, 0);
+	x[0] = exact(0);
+	x[x.size()-1] = exact(1);
+	double h = 1.0 / n;
+	double c = 1.0 / h / h;
+	std::vector<double> x_new = x;
+
+	Grid1D grid(0, 1, n);
+	VtkUtils::TimeSeriesWriter writer("convergence1");
+	writer.set_time_step(10);
+
+	for (size_t it=0; it<maxit; ++it){
+		std::string fn = writer.add(it);
+		if (!fn.empty()){
+			grid.save_vtk(fn);
+			VtkUtils::add_point_data(x, "data", fn);
+		}
+
+		std::cout << it << std::endl;
+		// Jacobi
+		// Seidel
+		for (size_t i=1; i<x.size()-1; ++i){
+			double coo = grid.point(i).x();
+			x[i] = (rhs(coo) + c * (x[i-1] + x[i+1])) / (2*c);
+		}
+		//std::swap(x_new, x);
+	}
+}
+
+
