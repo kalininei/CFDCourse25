@@ -514,12 +514,12 @@ TEST_CASE("1D convection-diffusion with CG", "[convdiff-fem-cg]"){
 	double tend = 2.0;
 	double h = 0.1;
 	double Lx = 4;
-	double Cu = 0.5;
+	double C = 0.5;
 	double eps = 1e-3;
 
 	// solver
 	Grid1D grid(0, Lx, Lx / h);
-	double tau = Cu * h;
+	double tau = C * h;
 	CgWorker worker(grid, eps, tau);
 	worker.initialize();
 

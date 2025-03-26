@@ -1,0 +1,114 @@
+\section{Лекция 24 (22.03)}
+
+\subsection{Стабилизация методом характеристик}
+\label{seq:char-stab}
+
+Введём обозначение
+$$
+u^\theta = \theta \hat u + \left(1 - \theta\right) u.
+$$
+Полудискретизованное уравнение конвекции-диффузии со стабилизирущим слагаемым
+примет вид
+\begin{equation}
+\label{eq:cg_stab_multidim}
+\frac{\hat u - u}{\tau} =
+-\vec v \cdot \nabla u 
++\eps \nabla^2 u^\theta
++\frac{\tau}{2} \nabla\cdot \left(\left(\vec v \cdot \nabla u\right)\vec v\right)
+- (1-\theta)\eps\vec v \cdot \nabla\left(\nabla^2 u\right).
+\end{equation}
+
+\subsubsection{Конечноэлементная процедура}
+Далее по стандартной процедуре взвешенных невязок
+домножим уравнение \cref{eq:cg_stab_multidim} на систему пробных функций $\phi_i$
+и проинтегрируем по области расчёта
+с применением формулы интегрирования по частям \cref{eq:partint} к трём последним слагаемым правой части:
+\begin{equation*}
+\begin{split}
+\feint{\frac{\hat u - u}{\tau}\phi_i} = &
+-\feint{\left(\vec v \cdot \nabla u \right)\phi_i} \\
+&
++\eps\left(
+	-\feint{\nabla u^\theta \cdot \nabla \phi_i}
+	+ \febint{\dfr{u^\theta}{n}\phi_i}
+\right) \\
+&
++\frac{\tau}{2}\left(
+	-\feint{\left(\vec v \cdot \nabla u\right)\left(\vec v\cdot\nabla\phi_i\right)}
+	+\febint{\left(\vec v \cdot \nabla u\right) v_n \phi_i}
+\right)\\
+&
++\eps(1-\theta)\left(
+\feint{\nabla^2 u \nabla\cdot\left(\phi_i \vec v\right)}
+-\febint{v_n \phi_i\nabla^2 u}
+\right)
+\end{split}
+\end{equation*}
+Согласно подходу Бубнова-Галёркина
+разложим искомую функцию на систему базисных
+функций, равную системе пробных функций
+$$
+u(\vec x) = \sum_i u_i \phi_i(\vec x)
+$$
+Получим матричное выражение для перехода на следующий временной слой
+\begin{equation}
+\begin{array}{l}
+\mat L \hat u = \mat R u \\
+\mat L = \mat M + \tau\eps\theta\left(\mat S - \mat{B^S}\right) \\
+\mat R = \mat M - \tau \mat K - \tau(1 - \theta)\eps\left(\mat S - \mat{B^S}\right)
++ \frac{\tau^2}{2}\left(-\mat{K^s} + \mat{B^{Ks}}\right)
++ \eps\tau(1 - \theta)\left(\mat G_2 - \mat{B^{G_2}}\right)
+\end{array}
+\end{equation}
+где введена новая матрица $\mat G_2$:
+\begin{equation*}
+\mat G_2 = \feint{\nabla^2 \phi_j \nabla\cdot\left(\vec v \phi_i\right)},
+\end{equation*}
+которая обращается в ноль при использовании линейных конечных элементов.
+
+\subsection{Задание для самостоятельной работы}
+В тестовом примере \cvar{[convdiff-fem-cg]}
+из файла \ename{convdiff-fem-test.cpp}
+производится численного решение
+той же одномерной задачи, которая рассматривалась
+ранее в п.~\ref{sec:hw_supg}.
+Решение производится методом конечных
+элементов со стабилизацией методом
+характеристик.
+Задача полудискретизуется по схеме Кранка-Николсон ($\theta=\sfrac12$) c шагом по времени, вычисленным через число Куранта $\rm C = 0.5$.
+
+Необходимо:
+\begin{enumerate}
+\item С помощью анимированных графиков сравнить полученное численное решение одномерной задачи (\cvar{[convdiff-fem-cg]})
+      с точным решением, а также с решением, полученнным с помощью SUPG-стабилизации;
+\item Сделать расчёты одномерной задачи с различными шагами по времени $\tau$.
+      Продемострировать отличия в полученных решениях на анимированных графиках.
+      Нарисовать зависимость нормы отлонения численного решения от точного на финальный момент времени
+$$
+n_2 = ||u - u^e||_2
+$$
+от шага по времени $\tau$.
+\item Написать аналогичный тест для двумерного случая (решение в единичном квадрате) и неконстантного поля скорости:
+$ \vec v = (-y + 0.5, x - 0.5) $.
+Точное решение в этом случае будет иметь вид
+$$
+\begin{array}{ll}
+\bar x = 0.5 + (x_0 - 0.5) \cos(t) - (y_0 - 0.5) \sin(t)                          & \text{-- текущее положение пика}\\
+\bar y = 0.5 + (x_0 - 0.5) \sin(t) + (y_0 - 0.5) \cos(t)                          & \\
+r^2 = (x - \bar x)^2 + (y - \bar y)^2                                             & \text{-- расстояние от пика}\\[10pt]
+u^e = \dfrac{1}{4 \pi \eps (t+t_0)} \exp\left(-\dfrac{r^2}{4 \eps (t+t_0)}\right) & \text{-- решение}
+\end{array}
+$$
+Использовать следующие параметры:
+	\begin{itemize}
+	\item начальное положение пика $x_0 = 0.8, y_0 = 0.5$,
+	\item сдвиг по времени $t_0 = 0.3$,
+	\item коэффициент диффузии $\eps = 10^{-3}$,
+	\item временной интервал $t \in [0, 2\pi]$.
+	\end{itemize}
+Анимировать решение, полученное на структурированной и скошенной сетках с количеством ячеек $N \approx 5000$.
+\item Для структурированной сетки нарисовать зависимость $n_2$ на момент $t = 2\pi$ в зависимости от шага сетки $h$ 
+      для фиксированного ${\rm C} = 0.5$ (в качестве характерной скорости при вычислении числа Куранта использовать единицу).
+\item Нарисовать зависимость $n_2$ от шага по времени $\tau$ для фиксированной двумерной сетки $N\approx5000$.
+      Использовать структурированную и скошенную сетки.
+\end{enumerate}
