@@ -60,3 +60,12 @@ Vector IElementIntegrals::OperandArg::interpolate(const std::vector<Vector>& f) 
 	}
 	return ret;
 }
+
+double IElementIntegrals::OperandArg::divergence(const std::vector<Vector>& f) const{
+	double ret = 0.0;
+	for (size_t i=0; i<basis->size(); ++i){
+		Vector dphi = grad_phi(i);
+		ret += (f[i].x() * dphi.x() + f[i].y() * dphi.y() + f[i].z() * dphi.z());
+	}
+	return ret;
+}

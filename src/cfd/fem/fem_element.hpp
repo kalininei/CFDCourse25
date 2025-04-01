@@ -188,12 +188,13 @@ public:
 	const IElementBasis* basis;
 	Point xi;
 
-	double phi(size_t i) const;
-	Vector grad_phi(size_t i) const;
+	double phi(size_t i) const;        // phi_i at (xi)
+	Vector grad_phi(size_t i) const;   // dphi_i/dx,dy,dz at xi
 	double modj() const;
 	const JacobiMatrix* jacobi() const;
 	double interpolate(const std::vector<double>& f) const;
 	Vector interpolate(const std::vector<Vector>& f) const;
+	double divergence(const std::vector<Vector>& f) const;
 public:
 	struct Cache;
 	std::unique_ptr<Cache> _pcache;
