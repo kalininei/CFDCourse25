@@ -124,6 +124,12 @@ void cfd::dbg::save_extended_colloc_data(const IGrid& grid, const std::vector<do
 	VtkUtils::add_cell_data(d2, dbg_vtk_cap, dbg_vtk_filename);
 }
 
+void cfd::dbg::save_extended_colloc_data(const IGrid& grid, const double* data){
+	size_t n_colloc = save_extended_colloc(grid);
+	std::vector<double> d2(data, data + n_colloc);
+	VtkUtils::add_cell_data(d2, dbg_vtk_cap, dbg_vtk_filename);
+}
+
 void cfd::dbg::save_face_data(const IGrid& grid, const std::vector<double>& data){
 	save_faces(grid);
 	std::vector<double> d2(data.begin(), data.begin() + grid.n_faces());

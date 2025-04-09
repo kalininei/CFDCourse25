@@ -75,6 +75,14 @@ std::vector<size_t> FvmExtendedCollocations::tab_colloc_colloc(size_t icolloc) c
 	return _tab_colloc_colloc[icolloc];
 }
 
+bool FvmExtendedCollocations::is_boundary_colloc(size_t icolloc) const{
+	return icolloc >= cell_collocations.size();
+}
+
+bool FvmExtendedCollocations::is_internal_colloc(size_t icolloc) const{
+	return icolloc < cell_collocations.size();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Cell gradient
 ///////////////////////////////////////////////////////////////////////////////
@@ -184,9 +192,9 @@ GaussLinearFvmCellGradient::GaussLinearFvmCellGradient(const IGrid& grid, const 
 	}
 }
 
-std::vector<Vector> IFvmCellGradient::compute(const std::vector<double>& u) const{
-	std::vector<double> x = _data[0].mult_vec(u);
-	std::vector<double> y = _data[1].mult_vec(u);
+std::vector<Vector> IFvmCellGradient::compute(const double* u) const{
+	std::vector<double> x = _data[0].mult_vec_p(u);
+	std::vector<double> y = _data[1].mult_vec_p(u);
 
 	std::vector<Vector> ret(x.size());
 	for (size_t i=0; i<ret.size(); ++i){
@@ -195,13 +203,17 @@ std::vector<Vector> IFvmCellGradient::compute(const std::vector<double>& u) cons
 	}
 
 	if (_data[2].n_rows() > 0){
-		std::vector<double> z = _data[2].mult_vec(u);
+		std::vector<double> z = _data[2].mult_vec_p(u);
 		for (size_t i=0; i<ret.size(); ++i){
 			ret[i].z() = z[i];
 		}
 	}
 
 	return ret;
+}
+
+std::vector<Vector> IFvmCellGradient::compute(const std::vector<double>& u) const{
+	return compute(u.data());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -316,11 +328,19 @@ FvmFacesDn::FvmFacesDn(const IGrid& grid): FvmFacesDn(grid, FvmExtendedCollocati
 FvmFacesDn::FvmFacesDn(const IGrid& grid, const FvmExtendedCollocations& colloc): _dfdn(build_dfdn_matrix(grid, colloc)){}
 
 std::vector<double> FvmFacesDn::compute(const std::vector<double>& f) const{
-	return _dfdn.mult_vec(f);
+	return compute(f.data());
+}
+
+std::vector<double> FvmFacesDn::compute(const double* f) const{
+	return _dfdn.mult_vec_p(f);
 }
 
 double FvmFacesDn::compute(size_t iface, const std::vector<double>& f) const{
-	return _dfdn.mult_vec(iface, f);
+	return compute(iface, f.data());
+}
+
+double FvmFacesDn::compute(size_t iface, const double* f) const{
+	return _dfdn.mult_vec_p(iface, f);
 }
 
 const std::map<size_t, double>& FvmFacesDn::linear_combination(size_t iface) const{

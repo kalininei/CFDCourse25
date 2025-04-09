@@ -10,6 +10,9 @@ namespace cfd{
  */
 class CsrStencil: public ISparseMatrix{
 public:
+	CsrStencil() = default;
+	CsrStencil(std::vector<size_t>&& addr, std::vector<size_t>&& cols):
+		_addr(std::move(addr)), _cols(std::move(cols)) {}
 	virtual ~CsrStencil() = default;
 	/**
 	 * @brief Fills CSR stencil by address and column vectors
@@ -42,8 +45,8 @@ public:
 	size_t n_nonzeros() const override;
 	bool is_in_stencil(size_t irow, size_t icol) const override;
 	double value(size_t irow, size_t icol) const override;
-	std::vector<double> mult_vec(const std::vector<double>& u) const override;
-	double mult_vec(size_t irow, const std::vector<double>& u) const override;
+	std::vector<double> mult_vec_p(const double* u) const override;
+	double mult_vec_p(size_t irow, const double* u) const override;
 private:
 	std::vector<size_t> _addr = {0};
 	std::vector<size_t> _cols;
@@ -56,6 +59,10 @@ class CsrMatrix: public CsrStencil{
 public:
 	CsrMatrix() = default;
 	CsrMatrix(const CsrStencil& stencil): CsrStencil(stencil), _vals(stencil.n_nonzeros(), 0.0){}
+	CsrMatrix(std::vector<size_t>&& addr, std::vector<size_t>&& cols, std::vector<double>&& vals):
+		CsrStencil(std::move(addr), std::move(cols)), _vals(std::move(vals)){}
+
+	void set_data(std::vector<size_t>&& addr, std::vector<size_t>&& cols, std::vector<double>&& vals);
 
 	/**
 	 * @brief Set matrix values
@@ -75,11 +82,17 @@ public:
 	// overrides
 	void validate() const override;
 	double value(size_t irow, size_t icol) const override;
-	std::vector<double> mult_vec(const std::vector<double>& u) const override;
-	double mult_vec(size_t irow, const std::vector<double>& u) const override;
+	std::vector<double> mult_vec_p(const double* u) const override;
+	double mult_vec_p(size_t irow, const double* u) const override;
 private:
 	std::vector<double> _vals;
 };
+
+
+CsrMatrix assemble_block_matrix(size_t block_n_rows, size_t block_n_cols, const std::vector<std::vector<const CsrMatrix*>>& blocks);
+
+class LodMatrix;
+CsrMatrix assemble_block_matrix(size_t block_n_rows, size_t block_n_cols, const std::vector<std::vector<const LodMatrix*>>& blocks);
 
 
 }

@@ -24,9 +24,12 @@ void dbg::print(const ISparseMatrix& mat){
 }
 
 void dbg::print(size_t irow, const ISparseMatrix& mat){
-	size_t n = mat.n_rows();
+	dbg::print(irow, mat, 0, mat.n_rows());
+}
+
+void dbg::print(size_t irow, const ISparseMatrix& mat, size_t col0, size_t col1){
 	std::cout << "-- ROW = " << irow << std::endl;
-	for (size_t icol=0; icol < n; ++icol){
+	for (size_t icol=col0; icol < col1; ++icol){
 		if (mat.is_in_stencil(irow, icol)){
 			std::cout << "   [" << std::setw(4) << icol << "] ";
 			std::cout << mat.value(irow, icol);

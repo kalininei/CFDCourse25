@@ -22,8 +22,8 @@ public:
 	// overriden
 	size_t n_rows() const override;
 	double value(size_t irow, size_t icol) const override;
-	std::vector<double> mult_vec(const std::vector<double>& u) const override;
-	double mult_vec(size_t irow, const std::vector<double>& u) const override;
+	std::vector<double> mult_vec_p(const double* u) const override;
+	double mult_vec_p(size_t irow, const double* u) const override;
 private:
 	const size_t _nrows;
 	const size_t _ncols;

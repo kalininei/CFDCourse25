@@ -31,6 +31,8 @@ public:
 
 	std::vector<size_t> tab_colloc_colloc(size_t icolloc) const;
 
+	bool is_boundary_colloc(size_t icolloc) const;
+	bool is_internal_colloc(size_t icolloc) const;
 private:
 	std::vector<std::array<size_t, 2>> _tab_face_colloc;
 	std::vector<std::vector<size_t>> _tab_colloc_colloc;
@@ -45,6 +47,7 @@ struct IFvmCellGradient{
 	virtual ~IFvmCellGradient() = default;
 
 	std::vector<Vector> compute(const std::vector<double>& u) const;
+	std::vector<Vector> compute(const double* u) const;
 protected:
 	std::array<CsrMatrix, 3> _data;
 };
@@ -70,9 +73,11 @@ struct FvmFacesDn{
 
 	/// computes dfdn for each grid face
 	std::vector<double> compute(const std::vector<double>& f) const;
+	std::vector<double> compute(const double* f) const;
 
 	/// computes dfdn for the given grid face
 	double compute(size_t iface, const std::vector<double>& f) const;
+	double compute(size_t iface, const double* f) const;
 
 	/// returns dfdn as a linear combination of collocation values
 	const std::map<size_t, double>& linear_combination(size_t iface) const;

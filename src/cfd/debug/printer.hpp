@@ -30,6 +30,18 @@ void print(const ISparseMatrix& mat);
 void print(size_t irow, const ISparseMatrix& mat);
 
 /**
+ * @brief prints sparse matrix row to std::cout
+ *
+ * @param irow  row index
+ * @param mat   sparse matrix
+ * @param icol0 start column
+ * @param icol1 end column
+ *
+ * prints only entries that are in the stencil
+ */
+void print(size_t irow, const ISparseMatrix& mat, size_t col0, size_t col1);
+
+/**
  * @brief prints dense vector to std::cout
  *
  * @param vec  vector to print
