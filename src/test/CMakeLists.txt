@@ -18,6 +18,7 @@ set (SRC
 	heat_transfer_piso_test.cpp
 	cavity_fem_cbs_test.cpp
 	cavity_fvm_coupled_test.cpp
+	cavity_fvm_test.cpp
 	
 	utils/filesystem.cpp
 	utils/vecmat.cpp
