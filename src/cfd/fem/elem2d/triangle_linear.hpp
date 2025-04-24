@@ -14,6 +14,7 @@ public:
 
 	JacobiMatrix jacobi(Point xi) const override;
 	Point to_physical(Point xi) const override;
+	Point to_parametric(Point p) const override;
 	Point parametric_center() const override;
 private:
 	Point _p0, _p1, _p2;

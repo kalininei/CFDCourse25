@@ -186,6 +186,10 @@ public:
 			: _grid(g), _eps(eps), _tau(tau),
 			  _fem(build_fem(g)), _u(_fem.n_bases(), 0){};
 	
+	ACNConvDiffFemWorker(const IGrid& g, double eps, double tau, std::function<FemAssembler(const IGrid&)> femassm)
+			: _grid(g), _eps(eps), _tau(tau),
+			  _fem(femassm(g)), _u(_fem.n_bases(), 0){};
+
 	void initialize(){
 		// velocity
 		for (size_t i=0; i<_fem.n_bases(); ++i){
@@ -371,7 +375,7 @@ protected:
 			}
 		}
 		// slae assembly
-		double theta = 0.5;
+		double theta = 1.0;
 		CsrMatrix Lhs(_fem.stencil());
 		CsrMatrix Rhs(_fem.stencil());
 		for (size_t a=0; a<Lhs.n_nonzeros(); ++a){
@@ -510,7 +514,7 @@ protected:
 }
 
 TEST_CASE("1D convection-diffusion with CG", "[convdiff-fem-cg]"){
-	std::cout << std::endl << "--- cfd24_test [convdiff-fem-cg] --- " << std::endl;
+	std::cout << std::endl << "--- cfd_test [convdiff-fem-cg] --- " << std::endl;
 	double tend = 2.0;
 	double h = 0.1;
 	double Lx = 4;
@@ -541,4 +545,202 @@ TEST_CASE("1D convection-diffusion with CG", "[convdiff-fem-cg]"){
 		std::cout << worker.current_time() << " " << n2 << std::endl;
 	};
 	CHECK(n2 == Approx(0.937086).margin(1e-6));
+}
+
+namespace {
+
+class LeastSquaresWorker: public ACNConvDiffFemWorker{
+public:
+	LeastSquaresWorker(const IGrid& grid, double eps, double tau, int npower=1, double theta=0.5, double gamma_mult=1.0)
+		:ACNConvDiffFemWorker(grid, eps, tau, [&](const IGrid& g){ return LeastSquaresWorker::build_fem_power(g, npower); }),
+		 _gamma_mult(gamma_mult), _theta(theta){}
+
+protected:
+	const double _gamma_mult;
+	const double _theta;
+
+	static FemAssembler build_fem_power(const IGrid& grid, int npower){
+		size_t n_bases = grid.n_points();
+		std::vector<FemElement> elements;
+		std::vector<std::vector<size_t>> tab_elem_basis;
+		if (grid.dim() != 1){
+			throw std::runtime_error("invalid fem grid");
+		}
+		n_bases += (npower-1)*grid.n_cells();
+	
+		//elements
+		for (size_t icell=0; icell < grid.n_cells(); ++icell){
+			std::vector<size_t> ipoints = grid.tab_cell_point(icell);
+			tab_elem_basis.push_back({
+				ipoints[0],
+				ipoints[1]
+			});
+			for (int i=1; i<npower; ++i){
+				tab_elem_basis.back().push_back(grid.n_points() + (npower-1)*icell + (i-1));
+			}
+
+			Point p0 = grid.point(ipoints[0]);
+			Point p1 = grid.point(ipoints[1]);
+			
+			auto geom = std::make_shared<SegmentLinearGeometry>(p0, p1);
+			std::shared_ptr<IElementBasis> basis;
+
+			switch (npower){
+				case 1: basis = std::make_shared<SegmentLinearBasis>(); break;
+				case 2: basis = std::make_shared<SegmentQuadraticBasis>(); break;
+				case 3: basis = std::make_shared<SegmentCubicBasis>(); break;
+				default: _THROW_NOT_IMP_;
+			}
+			const Quadrature* quadrature = quadrature_segment_gauss4();
+			auto integrals = std::make_shared<NumericElementIntegrals>(quadrature, geom, basis);
+			elements.push_back(FemElement{geom, basis, integrals});
+		}
+
+		return FemAssembler(n_bases, elements, tab_elem_basis);
+	}
+
+
+	void assemble_solver() override{
+		// Matrices
+		CsrMatrix M(_fem.stencil());
+		CsrMatrix K(_fem.stencil());
+		CsrMatrix D(_fem.stencil());
+		CsrMatrix StabLeft(_fem.stencil());
+		CsrMatrix StabRight(_fem.stencil());
+		
+		for (size_t ielem=0; ielem < _fem.n_elements(); ++ielem){
+			const FemElement& elem = _fem.element(ielem);
+			std::vector<Vector> vel = _fem.local_vector(ielem, _vx, _vy, _vz);
+			auto vx = _fem.local_vector(ielem, _vx);
+			auto vy = _fem.local_vector(ielem, _vy);
+			auto vz = _fem.local_vector(ielem, _vz);
+			double h = _grid.cell_size(ielem);
+
+			// ====================== Galerkin
+			// mass
+			{
+				std::vector<double> local = elem.integrals->mass_matrix();
+				_fem.add_to_global_matrix(ielem, local, M.vals());
+			}
+			// transport
+			{
+				std::vector<double> local = elem.integrals->transport_matrix(vx, vy, vz);
+				_fem.add_to_global_matrix(ielem, local, K.vals());
+			}
+			// diffusion
+			{
+				std::vector<double> local = elem.integrals->stiff_matrix();
+				_fem.add_to_global_matrix(ielem, local, D.vals());
+			}
+			// ====================== Least-Squares stabilization
+			// taumult = (theta) for left side and (theta-1) for right side
+			auto local_gls = [&](double taumult, size_t i, size_t j, const IElementIntegrals::OperandArg* arg){
+				Vector v = arg->interpolate(vel);
+				double absv = vector_abs(v);
+				Vector grad_phi_i = arg->grad_phi(i);
+				Vector grad_phi_j = arg->grad_phi(j);
+				double laplace_i = arg->laplace(i);
+				double laplace_j = arg->laplace(j);
+
+				double s_theta = (_theta == 0.5) ? 2 : _theta;
+				double s_eps = (laplace_i != 0 ||  laplace_j != 0) ? _eps : 0.0;  // zero for linear
+				double g = _gamma_mult/(s_theta/_tau + 2*absv/h + 4*s_eps/h/h);
+
+				// ===================== residual part
+				double mleft = 0;
+				// non stationary
+				mleft += arg->phi(j);
+				// convection
+				mleft += _tau * taumult * dot_product(v, grad_phi_j);
+				// diffusion
+				mleft -= _tau * _eps * taumult * laplace_j;
+
+				// ===================== trial part
+				double mright = 0;
+				// convection
+				mright += dot_product(v, grad_phi_i);
+				// diffusion
+				mright -= _eps * laplace_i;
+
+				return g * mleft * mright * arg->modj();
+			};
+			// left
+			{
+				std::vector<double> local = elem.integrals->custom_matrix([&](size_t i, size_t j, const IElementIntegrals::OperandArg* arg){
+					return local_gls(_theta, i, j, arg);
+				});
+				_fem.add_to_global_matrix(ielem, local, StabLeft.vals());
+			}
+			// right
+			{
+				std::vector<double> local = elem.integrals->custom_matrix([&](size_t i, size_t j, const IElementIntegrals::OperandArg* arg){
+					return local_gls(_theta-1, i, j, arg);
+				});
+				_fem.add_to_global_matrix(ielem, local, StabRight.vals());
+			}
+		}
+		// slae assembly
+		CsrMatrix Lhs(_fem.stencil());
+		CsrMatrix Rhs(_fem.stencil());
+		for (size_t a=0; a<Lhs.n_nonzeros(); ++a){
+			Lhs.vals()[a] =
+				M.vals()[a]
+				+ _tau*_theta*K.vals()[a]
+				+ _tau*_theta*_eps * D.vals()[a]
+				+ StabLeft.vals()[a]
+				;
+			Rhs.vals()[a] =
+				M.vals()[a]
+				- _tau*(1 - _theta)*K.vals()[a]
+				- _tau*(1 - _theta)*_eps*D.vals()[a]
+				+ StabRight.vals()[a]
+				;
+		}
+
+		// Boundary conditions
+		Lhs.set_unit_row(0);
+		Lhs.set_unit_row(_grid.n_points()-1);
+
+		// Solver
+		_solver.set_matrix(Lhs);
+
+		_M = std::move(M);
+		_Rhs = std::move(Rhs);
+	}
+};
+
+}
+
+TEST_CASE("1D convection-diffusion with Galerkin/Least Squares", "[convdiff-fem-gls]"){
+	std::cout << std::endl << "--- cfd_test [convdiff-fem-gls] --- " << std::endl;
+	double tend = 2.0;
+	double h = 0.1;
+	double Lx = 4;
+	double Cu = 0.5;
+	double eps = 1e-3;
+
+	// solver
+	Grid1D grid(0, Lx, Lx / h);
+	double tau = Cu * h;
+	LeastSquaresWorker worker(grid, eps, tau, 1, 0.5, 1.0);
+	worker.initialize();
+
+	// saver
+	VtkUtils::TimeSeriesWriter writer("convdiff-gls");
+	std::string out_filename = writer.add(worker.current_time());
+	worker.save_vtk(out_filename);
+
+	double n2;
+	while (worker.current_time() < tend - 1e-6) {
+		// solve problem
+		worker.step();
+		// export solution to vtk
+		out_filename = writer.add(worker.current_time());
+		worker.save_vtk(out_filename);
+
+		n2 = worker.compute_norm2();
+
+		std::cout << std::setw(4) << std::left << worker.current_time() << "   " << n2 << std::endl;
+	};
+	CHECK(n2 == Approx(0.5779927436).margin(1e-6));
 }

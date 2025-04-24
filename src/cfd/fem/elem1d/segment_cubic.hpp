@@ -15,6 +15,7 @@ public:
 	std::vector<BasisType> basis_types() const override;
 	std::vector<double> value(Point xi) const override;
 	std::vector<Vector> grad(Point xi) const override;
+	std::vector<std::array<double, 6>> upper_hessian(Point xi) const override;
 private:
 	std::shared_ptr<const IElementGeometry> _geom;
 };

@@ -7,6 +7,7 @@ using namespace cfd;
 struct IElementIntegrals::OperandArg::Cache{
 	std::vector<double> phi;
 	std::vector<Vector> grad_phi;
+	std::vector<double> laplace;
 
 	double has_jac = false;
 	JacobiMatrix jac;
@@ -35,6 +36,41 @@ Vector IElementIntegrals::OperandArg::grad_phi(size_t i) const{
 		}
 	}
 	return _pcache->grad_phi[i];
+}
+
+double IElementIntegrals::OperandArg::laplace(size_t i) const{
+	if (_pcache->laplace.size() == 0){
+		_pcache->laplace.resize(basis->size(), 0);
+		double h = 1e-6;  // <- TODO: Compute from jacobian
+
+		Vector x = geom->to_physical(xi);
+		Vector xi1_minus = geom->to_parametric(x - Vector{h, 0, 0});
+		Vector xi1_plus =  geom->to_parametric(x + Vector{h, 0, 0});
+		Vector xi2_minus = geom->to_parametric(x - Vector{0, h, 0});
+		Vector xi2_plus =  geom->to_parametric(x + Vector{0, h, 0});
+		Vector xi3_minus = geom->to_parametric(x - Vector{0, 0, h});
+		Vector xi3_plus =  geom->to_parametric(x + Vector{0, 0, h});
+
+		std::vector<Vector> grad1_minus = basis->grad(xi1_minus);
+		std::vector<Vector> grad1_plus  = basis->grad(xi1_plus);
+		std::vector<Vector> grad2_minus = basis->grad(xi2_minus);
+		std::vector<Vector> grad2_plus  = basis->grad(xi2_plus);
+		std::vector<Vector> grad3_minus = basis->grad(xi3_minus);
+		std::vector<Vector> grad3_plus  = basis->grad(xi3_plus);
+
+		for (size_t i=0; i<basis->size(); ++i){
+			// use finite difference to compute divergence.
+			// TODO: should be done using metric tensor and Hesse matrix
+			double ddx0 = gradient_to_physical(*jacobi(), grad1_minus[i]).x();
+			double ddx1 = gradient_to_physical(*jacobi(), grad1_plus[i]).x();
+			double ddy0 = gradient_to_physical(*jacobi(), grad2_minus[i]).y();
+			double ddy1 = gradient_to_physical(*jacobi(), grad2_plus[i]).y();
+			double ddz0 = gradient_to_physical(*jacobi(), grad3_minus[i]).z();
+			double ddz1 = gradient_to_physical(*jacobi(), grad3_plus[i]).z();
+			_pcache->laplace[i] = (ddx1 - ddx0)/(2*h) + (ddy1 - ddy0)/(2*h) + (ddz1 - ddz0)/(2*h);
+		}
+	}
+	return _pcache->laplace[i];
 }
 
 const JacobiMatrix* IElementIntegrals::OperandArg::jacobi() const{

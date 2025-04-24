@@ -38,3 +38,11 @@ std::vector<Vector> SegmentQuadraticBasis::grad(Point xi) const {
 		Vector{-(2*x)}
 	};
 }
+
+std::vector<std::array<double, 6>> SegmentQuadraticBasis::upper_hessian(Point xi) const{
+	return {
+		{1, 0, 0, 0, 0, 0},
+		{1, 0, 0, 0, 0, 0},
+		{-2, 0, 0, 0, 0, 0}
+	};
+}

@@ -25,6 +25,10 @@ Point TriangleLinearGeometry::to_physical(Point xi_) const{
 	return (1 - xi - eta) * _p0 + xi * _p1 + eta * _p2;
 }
 
+Point TriangleLinearGeometry::to_parametric(Point p) const{
+	_THROW_NOT_IMP_;
+}
+
 Point TriangleLinearGeometry::parametric_center() const{
 	return {1.0/3.0, 1.0/3.0};
 }

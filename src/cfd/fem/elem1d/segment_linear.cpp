@@ -20,6 +20,11 @@ Point SegmentLinearGeometry::to_physical(Point xi) const{
 	return (1 - t) * _p0 + t * _p1;
 }
 
+Point SegmentLinearGeometry::to_parametric(Point p) const{
+	double t = (p.x() - _p0.x()) / (_p1.x() - _p0.x());
+	return Point{2*t - 1};
+}
+
 Point SegmentLinearGeometry::parametric_center() const{
 	return {0};
 }
@@ -46,6 +51,13 @@ std::vector<double> SegmentLinearBasis::value(Point xi_) const {
 
 std::vector<Vector> SegmentLinearBasis::grad(Point xi) const {
 	return { Vector{-0.5}, Vector{0.5} };
+}
+
+std::vector<std::array<double, 6>> SegmentLinearBasis::upper_hessian(Point xi) const{
+	return {
+		{0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0}
+	};
 }
 
 ///////////////////////////////////////////////////////////////////////////////

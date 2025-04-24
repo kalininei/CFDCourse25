@@ -190,6 +190,7 @@ public:
 
 	double phi(size_t i) const;        // phi_i at (xi)
 	Vector grad_phi(size_t i) const;   // dphi_i/dx,dy,dz at xi
+	double laplace(size_t i) const;    // div(grad(phi_i)) at xi
 	double modj() const;
 	const JacobiMatrix* jacobi() const;
 	double interpolate(const std::vector<double>& f) const;

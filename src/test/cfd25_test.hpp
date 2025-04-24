@@ -7,5 +7,6 @@
 #include "cfd/cfd25.hpp"
 #include "cfd/macros.hpp"
 #include "cfd/debug/printer.hpp"
+#include <iomanip>
 
 #endif
