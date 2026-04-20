@@ -44,6 +44,21 @@ public:
 	virtual std::vector<std::array<double, 6>> upper_hessian(Point xi) const { _THROW_NOT_IMP_; } 
 };
 
+class CompaundBasis : public IElementBasis {
+public:
+	CompaundBasis(std::vector<std::shared_ptr<IElementBasis>> bases);
+
+	size_t size() const override;
+	std::vector<Point> parametric_reference_points() const override;
+	std::vector<BasisType> basis_types() const override;
+	std::vector<double> value(Point) const override;
+	std::vector<Vector> grad(Point) const override;
+	std::vector<std::array<double, 6>> upper_hessian(Point) const override;
+
+private:
+	std::vector<std::shared_ptr<IElementBasis>> bases_;
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 // Element Integrals
 ///////////////////////////////////////////////////////////////////////////////
@@ -196,6 +211,7 @@ public:
 	double interpolate(const std::vector<double>& f) const;
 	Vector interpolate(const std::vector<Vector>& f) const;
 	double divergence(const std::vector<Vector>& f) const;
+	double subrange_interpolate(size_t istart, size_t iend, const std::vector<double>& f) const;
 public:
 	struct Cache;
 	std::unique_ptr<Cache> _pcache;

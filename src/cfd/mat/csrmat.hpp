@@ -20,8 +20,9 @@ public:
 	 * @param addr  address vector
 	 * @param cols  column vector
 	 */
-	void set_stencil(std::vector<size_t>&& addr, std::vector<size_t>&& cols);
-	void set_stencil(const std::vector<std::set<size_t>>& stencil_set);
+	virtual void set_stencil(std::vector<size_t>&& addr, std::vector<size_t>&& cols);
+	virtual void set_stencil(const std::vector<std::set<size_t>>& stencil_set);
+	virtual void set_stencil(const CsrStencil& stencil);
 
 	/**
 	 * @brief Address array getter
@@ -64,6 +65,10 @@ public:
 
 	void set_data(std::vector<size_t>&& addr, std::vector<size_t>&& cols, std::vector<double>&& vals);
 
+	virtual void set_stencil(std::vector<size_t>&& addr, std::vector<size_t>&& cols);
+	virtual void set_stencil(const std::vector<std::set<size_t>>& stencil_set);
+	virtual void set_stencil(const CsrStencil& stencil);
+
 	/**
 	 * @brief Set matrix values
 	 * 
@@ -78,6 +83,9 @@ public:
 	std::vector<double>& vals();
 
 	void set_unit_row(size_t irow);
+    void clear_row(size_t irow);
+    void add_value(size_t irow, size_t icol, double value);
+    void set_value(size_t irow, size_t icol, double value);
 
 	// overrides
 	void validate() const override;
@@ -88,12 +96,16 @@ private:
 	std::vector<double> _vals;
 };
 
+CsrMatrix assemble_block_matrix(const std::vector<std::vector<const CsrMatrix*>>& blocks);
 
-CsrMatrix assemble_block_matrix(size_t block_n_rows, size_t block_n_cols, const std::vector<std::vector<const CsrMatrix*>>& blocks);
-
+CsrMatrix assemble_block_matrix(size_t block_n_rows, size_t block_n_cols,
+                                const std::vector<std::vector<const CsrMatrix*>>& blocks);
 class LodMatrix;
-CsrMatrix assemble_block_matrix(size_t block_n_rows, size_t block_n_cols, const std::vector<std::vector<const LodMatrix*>>& blocks);
+CsrMatrix assemble_block_matrix(size_t block_n_rows, size_t block_n_cols,
+                                const std::vector<std::vector<const LodMatrix*>>& blocks);
 
+CsrMatrix mat_multiply(const CsrMatrix& A, const CsrMatrix& B);
+CsrMatrix mat_transpose(const CsrMatrix& A);
 
 }
 

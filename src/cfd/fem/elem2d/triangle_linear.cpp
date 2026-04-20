@@ -58,6 +58,34 @@ std::vector<Vector> TriangleLinearBasis::grad(Point xi) const {
 	return { Vector(-1, -1), Vector(1, 0), Vector(0, 1) };
 }
 
+size_t TriangleLinearBubbleBasis::size() const {
+	return 4;
+}
+
+std::vector<Point> TriangleLinearBubbleBasis::parametric_reference_points() const {
+	return {Point(0, 0), Point(1, 0), Point(0, 1), Point{1.0 / 3.0, 1.0 / 3.0}};
+}
+
+std::vector<double> TriangleLinearBubbleBasis::value(Point p) const {
+	double lambda1 = 1.0 - p.x() - p.y();
+	double lambda2 = p.x();
+	double lambda3 = p.y();
+
+	double n4 = 9 * lambda1 * lambda2 * lambda3;
+
+	return {lambda1 - n4, lambda2 - n4, lambda3 - n4, 3 * n4};
+}
+
+std::vector<Vector> TriangleLinearBubbleBasis::grad(Point p) const {
+	double dx = 9 * p.y() * (1 - 2 * p.x() - p.y());
+	double dy = 9 * p.x() * (1 - 2 * p.y() - p.x());
+	return {Vector(-1 - dx, -1 - dy), Vector(1 - dx, 0 - dy), Vector(0 - dx, 1 - dy), Vector(3 * dx, 3 * dy)};
+}
+
+std::vector<BasisType> TriangleLinearBubbleBasis::basis_types() const {
+	return {BasisType::Nodal, BasisType::Nodal, BasisType::Nodal, BasisType::Nodal};
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Integrals
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,8 +95,8 @@ std::vector<double> TriangleLinearIntegrals::mass_matrix() const {
 	double s0 = _jac.modj/12.0;
 	double s1 = _jac.modj/24.0;
 	return {s0, s1, s1,
-	        s1, s0, s1,
-	        s1, s1, s0};
+		s1, s0, s1,
+		s1, s1, s0};
 }
 
 std::vector<double> TriangleLinearIntegrals::load_vector() const {

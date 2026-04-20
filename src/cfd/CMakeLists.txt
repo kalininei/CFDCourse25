@@ -5,6 +5,8 @@ set (SRC
 	mat/lodmat.cpp
 	mat/densemat.cpp
 	mat/sparse_matrix_solver.cpp
+	mat/algebraic_bc.cpp
+	mat/umfpack_solver.cpp
 
 	geom/simplex.cpp
 	geom/searcher.cpp
@@ -15,6 +17,7 @@ set (SRC
 	grid/grid1d.cpp
 	grid/regular_grid2d.cpp
 	grid/unstructured_grid2d.cpp
+	grid/grid_partition.cpp
 
 	numeric_integration/quadrature.cpp
 	numeric_integration/segment_quadrature.cpp
@@ -26,7 +29,7 @@ set (SRC
 	debug/tictoc.cpp
 
 	fvm/fvm_assembler.cpp
-        fvm/fvm_dpdn_boundary.cpp
+	fvm/fvm_dpdn_boundary.cpp
 
 	fem/fem_assembler.cpp
 	fem/fem_element.cpp
@@ -40,6 +43,7 @@ set (SRC
 	fem/elem2d/triangle_quadratic.cpp
 	fem/elem2d/quadrangle_quadratic.cpp
 	fem/elem2d/triangle_cubic.cpp
+	fem/fem_cross_assembler.cpp
 )
 
 set (HEADERS
@@ -53,6 +57,8 @@ set (HEADERS
 	mat/lodmat.hpp
 	mat/sparse_matrix_solver.hpp
 	mat/densemat.hpp
+	mat/algebraic_bc.hpp
+	mat/umfpack_solver.hpp
 
 	geom/point.hpp
 	geom/simplex.hpp
@@ -65,6 +71,7 @@ set (HEADERS
 	grid/grid1d.hpp
 	grid/regular_grid2d.hpp
 	grid/unstructured_grid2d.hpp
+	grid/grid_partition.hpp
 
 	numeric_integration/quadrature.hpp
 	numeric_integration/segment_quadrature.hpp
@@ -76,7 +83,7 @@ set (HEADERS
 	debug/tictoc.hpp
 
 	fvm/fvm_assembler.cpp
-        fvm/fvm_dpdn_boundary.hpp
+	fvm/fvm_dpdn_boundary.hpp
 
 
 	fem/fem_assembler.hpp
@@ -91,6 +98,9 @@ set (HEADERS
 	fem/elem2d/triangle_quadratic.hpp
 	fem/elem2d/quadrangle_quadratic.hpp
 	fem/elem2d/triangle_cubic.hpp
+	fem/fem_cross_assembler.hpp
 )
 
 add_library(${CFD_TARGET} STATIC ${SRC} ${HEADERS})
+target_include_directories(${CFD_TARGET} PRIVATE ${UMFPACK_INCLUDE_DIR})
+target_link_libraries(${CFD_TARGET} PRIVATE ${UMFPACK_LIBRARIES})

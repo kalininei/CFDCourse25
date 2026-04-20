@@ -76,9 +76,12 @@ public:
 
 	virtual std::vector<size_t> tab_face_point(size_t iface) const = 0;
 	virtual std::vector<size_t> tab_cell_face(size_t icell) const = 0;
+	virtual std::vector<size_t> tab_point_cell(size_t ipoint) const;
+
 
 	virtual std::vector<size_t> boundary_faces() const;
 	virtual std::vector<size_t> boundary_points() const;
+	virtual std::pair<Point, Point> box() const;
 
 	/**
 	 * @brief Saves grid to vtk format
@@ -91,10 +94,13 @@ private:
 	struct Cache{
 		std::vector<size_t> boundary_faces;
 		std::vector<size_t> boundary_points;
+		std::vector<std::vector<size_t>> tab_point_cell;
+
 
 		void clear();
 		void need_boundary_faces(const IGrid& grid);
 		void need_boundary_points(const IGrid& grid);
+		void need_tab_point_cell(const IGrid& grid);
 	};
 	mutable Cache _cache;
 };

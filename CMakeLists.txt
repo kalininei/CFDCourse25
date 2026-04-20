@@ -34,6 +34,30 @@ if(NOT amgcl_POPULATED)
 endif()
 include_directories(${amgcl_SOURCE_DIR})
 
+# -------- umfpack
+find_path(UMFPACK_INCLUDE_DIR
+    NAMES umfpack.h
+    PATH_SUFFIXES suitesparse
+    PATHS /usr/include /usr/local/include
+)
+find_library(UMFPACK_LIBRARY
+    NAMES umfpack
+    PATHS /usr/lib64 /usr/lib /usr/local/lib
+)
+find_library(AMD_LIBRARY
+    NAMES amd
+    PATHS /usr/lib64 /usr/lib /usr/local/lib
+)
+find_library(SUITESPARSE_CONFIG_LIBRARY
+    NAMES suitesparseconfig
+    PATHS /usr/lib64 /usr/lib /usr/local/lib
+)
+set(UMFPACK_LIBRARIES
+    ${UMFPACK_LIBRARY}
+    ${AMD_LIBRARY}
+    ${SUITESPARSE_CONFIG_LIBRARY}
+)
+
 # ------- ghc
 FetchContent_Declare(
 	ghc

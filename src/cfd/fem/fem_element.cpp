@@ -86,7 +86,11 @@ double IElementIntegrals::OperandArg::modj() const{
 }
 
 double IElementIntegrals::OperandArg::interpolate(const std::vector<double>& f) const{
-	_THROW_NOT_IMP_;
+	double ret = 0.0;
+	for (size_t i=0; i<basis->size(); ++i){
+		ret += phi(i) * f[i];
+	}
+	return ret;
 }
 
 Vector IElementIntegrals::OperandArg::interpolate(const std::vector<Vector>& f) const{
@@ -102,6 +106,74 @@ double IElementIntegrals::OperandArg::divergence(const std::vector<Vector>& f) c
 	for (size_t i=0; i<basis->size(); ++i){
 		Vector dphi = grad_phi(i);
 		ret += (f[i].x() * dphi.x() + f[i].y() * dphi.y() + f[i].z() * dphi.z());
+	}
+	return ret;
+}
+
+double IElementIntegrals::OperandArg::subrange_interpolate(size_t istart, size_t iend, const std::vector<double>& f) const {
+	double ret = 0;
+	for (size_t i = istart; i < iend; ++i) {
+		ret += phi(i) * f[i];
+	}
+	return ret;
+}
+
+CompaundBasis::CompaundBasis(std::vector<std::shared_ptr<IElementBasis>> bases) : bases_(std::move(bases)) {}
+
+size_t CompaundBasis::size() const {
+	size_t ret = 0;
+	for (auto& b: bases_) {
+		ret += b->size();
+	}
+	return ret;
+}
+
+std::vector<Point> CompaundBasis::parametric_reference_points() const {
+	std::vector<Point> ret;
+	for (const auto& b: bases_) {
+		for (const Point& p: b->parametric_reference_points()) {
+			ret.push_back(p);
+		}
+	}
+	return ret;
+}
+
+std::vector<BasisType> CompaundBasis::basis_types() const{
+	std::vector<BasisType> ret;
+	for (const auto& b: bases_) {
+		for (const BasisType& p: b->basis_types()) {
+			ret.push_back(p);
+		}
+	}
+	return ret;
+}
+
+std::vector<double> CompaundBasis::value(Point p) const {
+	std::vector<double> ret;
+	for (const auto& b: bases_) {
+		for (double x: b->value(p)) {
+			ret.push_back(x);
+		}
+	}
+	return ret;
+}
+
+std::vector<Vector> CompaundBasis::grad(Point p) const {
+	std::vector<Vector> ret;
+	for (const auto& b: bases_) {
+		for (Vector x: b->grad(p)) {
+			ret.push_back(x);
+		}
+	}
+	return ret;
+}
+
+std::vector<std::array<double, 6>> CompaundBasis::upper_hessian(Point p) const {
+	std::vector<std::array<double, 6>> ret;
+	for (const auto& b: bases_) {
+		for (const auto& x: b->upper_hessian(p)) {
+			ret.push_back(x);
+		}
 	}
 	return ret;
 }

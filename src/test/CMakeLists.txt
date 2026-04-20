@@ -19,6 +19,8 @@ set (SRC
 	cavity_fem_cbs_test.cpp
 	cavity_fvm_coupled_test.cpp
 	cavity_fvm_test.cpp
+	heat_fem_simple_test.cpp
+	poisson_ddm_test.cpp
 	
 	utils/filesystem.cpp
 	utils/vecmat.cpp
@@ -32,7 +34,6 @@ set (HEADERS
 )
 
 add_executable(cfd25_test ${SRC} ${HEADERS})
-#target_link_libraries(cfd25_test PRIVATE ${CATCH2_FRAMEWORK} ${CFD_TARGET})
 target_link_libraries(cfd25_test PRIVATE ${CFD_TARGET})
 target_include_directories(cfd25_test PRIVATE ${catch_SOURCE_DIR}/single_include/)
 target_include_directories(cfd25_test PRIVATE ${CMAKE_SOURCE_DIR}/src/test)

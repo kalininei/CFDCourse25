@@ -10,7 +10,9 @@ using namespace cfd;
 // FvmExtendedCollocations
 ///////////////////////////////////////////////////////////////////////////////
 
-FvmExtendedCollocations::FvmExtendedCollocations(const IGrid& grid){
+FvmExtendedCollocations::FvmExtendedCollocations(const IGrid& grid, const std::vector<size_t>& ignored_bnd_faces){
+	std::set<size_t> ignored_bnd_faces_set(ignored_bnd_faces.begin(), ignored_bnd_faces.end());
+
 	// cell loop
 	for (size_t icell=0; icell<grid.n_cells(); ++icell){
 		// collocations at the cell center
@@ -26,15 +28,17 @@ FvmExtendedCollocations::FvmExtendedCollocations(const IGrid& grid){
 		_tab_face_colloc.push_back({cells[0], cells[1]});
 
 		// collocations at the boundary faces
-		if (cells[0] == INVALID_INDEX || cells[1] == INVALID_INDEX){
-			points.push_back(grid.face_center(iface));
-			face_collocations.push_back(points.size()-1);
-			_face_indices.push_back(iface);
+		if (ignored_bnd_faces_set.find(iface) == ignored_bnd_faces_set.end()){
+			if (cells[0] == INVALID_INDEX || cells[1] == INVALID_INDEX){
+				points.push_back(grid.face_center(iface));
+				face_collocations.push_back(points.size()-1);
+				_face_indices.push_back(iface);
 
-			if (cells[0] == INVALID_INDEX){
-				_tab_face_colloc.back()[0] = points.size()-1;
-			} else {
-				_tab_face_colloc.back()[1] = points.size()-1;
+				if (cells[0] == INVALID_INDEX){
+					_tab_face_colloc.back()[0] = points.size()-1;
+				} else {
+					_tab_face_colloc.back()[1] = points.size()-1;
+				}
 			}
 		}
 	}
@@ -42,8 +46,10 @@ FvmExtendedCollocations::FvmExtendedCollocations(const IGrid& grid){
 	// collocations connectivity
 	_tab_colloc_colloc.resize(points.size());
 	for (const std::array<size_t, 2>& fc: _tab_face_colloc){
-		_tab_colloc_colloc[fc[1]].push_back(fc[0]);
-		_tab_colloc_colloc[fc[0]].push_back(fc[1]);
+		if (fc[0] != INVALID_INDEX && fc[1] != INVALID_INDEX){
+			_tab_colloc_colloc[fc[1]].push_back(fc[0]);
+			_tab_colloc_colloc[fc[0]].push_back(fc[1]);
+		}
 	}
 }
 
@@ -222,6 +228,101 @@ std::vector<Vector> IFvmCellGradient::compute(const std::vector<double>& u) cons
 
 namespace {
 
+//LodMatrix assemble_faces_dudn_2d(const IGrid& grid, const FvmExtendedCollocations& colloc){
+//        LodMatrix mat(grid.n_faces());
+
+//        std::vector<std::vector<size_t>> tab_point_colloc(grid.n_points());
+//        {
+//                for (size_t icolloc: colloc.cell_collocations){
+//                        size_t icell = colloc.cell_index(icolloc);
+//                        for (size_t ipoint: grid.tab_cell_point(icell)){
+//                                tab_point_colloc[ipoint].push_back(icolloc);
+//                        }
+//                }
+//                for (size_t icolloc: colloc.face_collocations){
+//                        size_t iface = colloc.face_index(icolloc);
+//                        for (size_t ipoint: grid.tab_face_point(iface)){
+//                                tab_point_colloc[ipoint].push_back(icolloc);
+//                        }
+//                }
+//        }
+//        auto find_closest_collocation = [&](size_t grid_point, size_t excl0, size_t excl1){
+//                size_t ret = INVALID_INDEX;
+//                double min_meas = 1e100;
+//                Point p0 = grid.point(grid_point);
+//                for (size_t icolloc: tab_point_colloc[grid_point]){
+//                        if (icolloc != excl0 && icolloc != excl1){
+//                                double meas = vector_meas(p0 - colloc.points[icolloc]);
+//                                if (meas < min_meas){
+//                                        min_meas = meas;
+//                                        ret = icolloc;
+//                                }
+//                        }
+//                }
+//                return ret;
+//        };
+
+//        auto add_ds_entry = [&](const Vector& normal, const Vector& c, size_t col0, size_t col1, size_t col2, size_t iface){
+//                Vector s(-normal.y(), normal.x());
+//                double cos_cos = dot_product(c, s) / dot_product(c, normal);
+
+//                Point p0 = colloc.points[col0];
+//                Point p1 = colloc.points[col1];
+//                Point p2 = colloc.points[col2];
+//                double tri_area = triangle_area(p0, p1, p2);
+
+//                double coef = -0.5*cos_cos/tri_area;
+
+//                double x0 = p0.x(); double y0 = p0.y();
+//                double x1 = p1.x(); double y1 = p1.y();
+//                double x2 = p2.x(); double y2 = p2.y();
+//                double dx0 = (y1 - y2)/2.0;
+//                double dy0 = (x2 - x1)/2.0;
+//                double dx1 = (y2 - y0)/2.0;
+//                double dy1 = (x0 - x2)/2.0;
+//                double dx2 = (y0 - y1)/2.0;
+//                double dy2 = (x1 - x0)/2.0;
+
+//                mat.add_value(iface, col0, coef*(dx0*s.x() + dy0*s.y()));
+//                mat.add_value(iface, col1, coef*(dx1*s.x() + dy1*s.y()));
+//                mat.add_value(iface, col2, coef*(dx2*s.x() + dy2*s.y()));
+//        };
+
+//        for (size_t iface = 0; iface < grid.n_faces(); ++iface){
+//                Vector normal = grid.face_normal(iface);
+//                size_t negative_collocation = colloc.tab_face_colloc(iface)[0];
+//                size_t positive_collocation = colloc.tab_face_colloc(iface)[1];
+//                if (negative_collocation == INVALID_INDEX || positive_collocation == INVALID_INDEX){
+//                        continue;
+//                }
+
+//                Point ci = colloc.points[negative_collocation];
+//                Point cj = colloc.points[positive_collocation];
+	
+//                // +dudc / cos(c,n);
+//                double v1 = 1.0/dot_product(normal, cj-ci);
+//                mat.set_value(iface, positive_collocation, v1);
+//                mat.set_value(iface, negative_collocation, -v1);
+
+//                // -duds*cos(c,s)/cos(c,n) 
+//                Vector c = (cj - ci)/vector_abs(cj - ci);
+//                {
+//                        // left point
+//                        size_t igrid = grid.tab_face_point(iface)[0];
+//                        size_t col1 = find_closest_collocation(igrid, positive_collocation, negative_collocation);
+//                        add_ds_entry(normal, c, negative_collocation, col1, positive_collocation, iface);
+//                }
+//                {
+//                        // right point
+//                        size_t igrid = grid.tab_face_point(iface)[1];
+//                        size_t col1 = find_closest_collocation(igrid, positive_collocation, negative_collocation);
+//                        add_ds_entry(normal, c, positive_collocation, col1, negative_collocation, iface);
+//                }
+//        }
+
+//        return mat;
+//}
+
 LodMatrix assemble_faces_dudn_2d(const IGrid& grid, const FvmExtendedCollocations& colloc){
 	LodMatrix mat(grid.n_faces());
 
@@ -241,22 +342,42 @@ LodMatrix assemble_faces_dudn_2d(const IGrid& grid, const FvmExtendedCollocation
 		}
 	}
 	auto find_closest_collocation = [&](size_t grid_point, size_t excl0, size_t excl1){
-		size_t ret = INVALID_INDEX;
+		std::vector<size_t> ret;
 		double min_meas = 1e100;
 		Point p0 = grid.point(grid_point);
 		for (size_t icolloc: tab_point_colloc[grid_point]){
 			if (icolloc != excl0 && icolloc != excl1){
 				double meas = vector_meas(p0 - colloc.points[icolloc]);
-				if (meas < min_meas){
+				if (std::abs(meas - min_meas) < 1e-12){
+					ret.push_back(icolloc);
+				} else if (meas < min_meas){
 					min_meas = meas;
-					ret = icolloc;
+					ret = {icolloc};
 				}
 			}
+		}
+		if (ret.empty()){
+			for (size_t icolloc1: tab_point_colloc[grid_point]){
+				for (size_t icolloc: colloc.tab_colloc_colloc(icolloc1)){
+					if (icolloc != excl0 && icolloc != excl1){
+						double meas = vector_meas(p0 - colloc.points[icolloc]);
+						if (std::abs(meas - min_meas) < 1e-12){
+							ret.push_back(icolloc);
+						} else if (meas < min_meas){
+							min_meas = meas;
+							ret = {icolloc};
+						}
+					}
+				}
+			}
+		}
+		if (ret.empty()){
+			throw std::runtime_error("Failed to find closest collocation to the given point");
 		}
 		return ret;
 	};
 
-	auto add_ds_entry = [&](const Vector& normal, const Vector& c, size_t col0, size_t col1, size_t col2, size_t iface){
+	auto add_ds_entry = [&](double w, const Vector& normal, const Vector& c, size_t col0, size_t col1, size_t col2, size_t iface){
 		Vector s(-normal.y(), normal.x());
 		double cos_cos = dot_product(c, s) / dot_product(c, normal);
 
@@ -265,7 +386,7 @@ LodMatrix assemble_faces_dudn_2d(const IGrid& grid, const FvmExtendedCollocation
 		Point p2 = colloc.points[col2];
 		double tri_area = triangle_area(p0, p1, p2);
 
-		double coef = -0.5*cos_cos/tri_area;
+		double coef = -w * 0.5*cos_cos/tri_area;
 
 		double x0 = p0.x(); double y0 = p0.y();
 		double x1 = p1.x(); double y1 = p1.y();
@@ -286,27 +407,36 @@ LodMatrix assemble_faces_dudn_2d(const IGrid& grid, const FvmExtendedCollocation
 		Vector normal = grid.face_normal(iface);
 		size_t negative_collocation = colloc.tab_face_colloc(iface)[0];
 		size_t positive_collocation = colloc.tab_face_colloc(iface)[1];
+		if (negative_collocation == INVALID_INDEX || positive_collocation == INVALID_INDEX){
+			continue;
+		}
 		Point ci = colloc.points[negative_collocation];
 		Point cj = colloc.points[positive_collocation];
-	
+
 		// +dudc / cos(c,n);
 		double v1 = 1.0/dot_product(normal, cj-ci);
 		mat.set_value(iface, positive_collocation, v1);
 		mat.set_value(iface, negative_collocation, -v1);
 
-		// -duds*cos(c,s)/cos(c,n) 
+		// -duds*cos(c,s)/cos(c,n)
 		Vector c = (cj - ci)/vector_abs(cj - ci);
 		{
 			// left point
 			size_t igrid = grid.tab_face_point(iface)[0];
-			size_t col1 = find_closest_collocation(igrid, positive_collocation, negative_collocation);
-			add_ds_entry(normal, c, negative_collocation, col1, positive_collocation, iface);
+			std::vector<size_t> col1 = find_closest_collocation(igrid, positive_collocation, negative_collocation);
+			double w = 1.0 / col1.size();
+			for (size_t c1: col1){
+				add_ds_entry(w, normal, c, negative_collocation, c1, positive_collocation, iface);
+			}
 		}
 		{
 			// right point
 			size_t igrid = grid.tab_face_point(iface)[1];
-			size_t col1 = find_closest_collocation(igrid, positive_collocation, negative_collocation);
-			add_ds_entry(normal, c, positive_collocation, col1, negative_collocation, iface);
+			std::vector<size_t> col1 = find_closest_collocation(igrid, positive_collocation, negative_collocation);
+			double w = 1.0 / col1.size();
+			for (size_t c1: col1){
+				add_ds_entry(w, normal, c, positive_collocation, c1, negative_collocation, iface);
+			}
 		}
 	}
 
@@ -419,6 +549,10 @@ std::vector<FvmLinformFacesDn::linform_t> assemble_linform_2d(const IGrid& grid,
 		Vector normal = grid.face_normal(iface);
 		size_t negative_collocation = colloc.tab_face_colloc(iface)[0];
 		size_t positive_collocation = colloc.tab_face_colloc(iface)[1];
+		if (negative_collocation == INVALID_INDEX || positive_collocation == INVALID_INDEX){
+			continue;
+		}
+
 		Point ci = colloc.points[negative_collocation];
 		Point cj = colloc.points[positive_collocation];
 	
