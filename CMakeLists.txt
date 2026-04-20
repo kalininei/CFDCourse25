@@ -35,6 +35,7 @@ endif()
 include_directories(${amgcl_SOURCE_DIR})
 
 # -------- umfpack
+SET(UMFPACK_SEARCH_PATH /usr/lib64/ /usr/lib /usr/local/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
 find_path(UMFPACK_INCLUDE_DIR
     NAMES umfpack.h
     PATH_SUFFIXES suitesparse
@@ -42,15 +43,15 @@ find_path(UMFPACK_INCLUDE_DIR
 )
 find_library(UMFPACK_LIBRARY
     NAMES umfpack
-    PATHS /usr/lib64 /usr/lib /usr/local/lib
+    PATHS ${UMFPACK_SEARCH_PATH}
 )
 find_library(AMD_LIBRARY
     NAMES amd
-    PATHS /usr/lib64 /usr/lib /usr/local/lib
+    PATHS ${UMFPACK_SEARCH_PATH}
 )
 find_library(SUITESPARSE_CONFIG_LIBRARY
     NAMES suitesparseconfig
-    PATHS /usr/lib64 /usr/lib /usr/local/lib
+    PATHS ${UMFPACK_SEARCH_PATH}
 )
 set(UMFPACK_LIBRARIES
     ${UMFPACK_LIBRARY}
@@ -70,6 +71,11 @@ if(NOT ghc_POPULATED)
 endif()
 include_directories(${ghc_SOURCE_DIR}/include)
 
+# -------- mpi
+option(MPI_TESTS "Enable MPI tests" OFF)
+if (MPI_TESTS)
+	find_package(MPI REQUIRED)
+endif()
 
 # build all binaries to build/bin
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

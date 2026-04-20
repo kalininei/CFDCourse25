@@ -21,6 +21,8 @@ set (SRC
 	cavity_fvm_test.cpp
 	heat_fem_simple_test.cpp
 	poisson_ddm_test.cpp
+	cavity_fvm_rans_ke_test.cpp
+	cavity_fvm_rans_ko_test.cpp
 	
 	utils/filesystem.cpp
 	utils/vecmat.cpp
