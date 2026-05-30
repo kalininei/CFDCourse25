@@ -512,7 +512,7 @@ std::vector<double> CavityFvmWorker::compute_epsilon(const std::vector<double>& 
 			mat.set_unit_row(icolloc);
 			rhs[icolloc] = eps_i;
 			// on near-boundary cell
-			rhs[icell] = w * eps_i;
+			rhs[icell] += w * eps_i;
 		}
 	}
 	
